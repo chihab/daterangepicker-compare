@@ -9,7 +9,6 @@
     "es6"
   ],
   "license": "MIT",
-  "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
@@ -17,6 +16,11 @@
     "vendor",
     "test",
     "tests"
+  ],
+  "main": [
+    "js/calendar.js",
+    "js/date-range-picker.js",
+    "css/datepicker.css"
   ],
   "dependencies": {
     "bootstrap": "latest",
