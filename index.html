@@ -1,12 +1,14 @@
 <html>
 <head>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="js/calendar.js"></script>
-    <script src="js/date-range-picker.js"></script>
-
-    <link href="css/datepicker.css" rel="stylesheet" type="text/css"/>
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+
+    <link href="css/datepicker.css" rel="stylesheet" type="text/css"/>
+    <script src="js/utils.js"></script>
+    <script src="js/date-range-picker.js"></script>
+    <!--<script src="js/calendar.js"></script>-->
+    <script src="js/daterangepicker.js"></script>
 
     <script>
         var translated_dates = {
@@ -16,125 +18,131 @@
             months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         };
+        $(document).ready(function () {
+            $('#calender').drp({}, function(start, end, cmpStart, cmpEnd){
+                console.log(start, end, cmpStart, cmpEnd);
+            });
+        });
     </script>
 </head>
 <body>
-<div class="bootstrap">
-    <div id="calendar" class="panel">
-        <form action="" method="post" id="calendar_form" name="calendar_form" class="form-inline">
-            <div class="btn-group">
-                <button type="button" name="submitDateDay" class="btn btn-default submitDateDay">
-                    Day
-                </button>
-                <button type="button" name="submitDateMonth" class="btn btn-default submitDateMonth">
-                    Month
-                </button>
-                <button type="button" name="submitDateYear" class="btn btn-default submitDateYear">
-                    Year
-                </button>
-                <button type="button" name="submitDateDayPrev" class="btn btn-default submitDateDayPrev">
-                    Day-1
-                </button>
-                <button type="button" name="submitDateMonthPrev" class="btn btn-default submitDateMonthPrev">
-                    Month-1
-                </button>
-                <button type="button" name="submitDateYearPrev" class="btn btn-default submitDateYearPrev">
-                    Year-1
-                </button>
-            </div>
-            <div class="form-group pull-right">
-                <button id="datepickerExpand" class="btn btn-default" type="button">
-                    <i class="fa fa-calendar-empty"></i>
-							<span class="hidden-xs">
-								From
-                                <strong class="text-info" id="datepicker-from-info"></strong>
-                                To
-                                <strong class="text-info" id="datepicker-to-info"></strong>
-								<strong class="text-info" id="datepicker-diff-info"></strong>
-							</span>
-                    <i class="fa fa-caret-down"></i>
-                </button>
-            </div>
-            <div id="datepicker" class="row row-padding-top hide">
-                <div class="col-lg-12">
-                    <div class="daterangepicker-days">
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="datepicker1" data-date="" data-date-format="Y-mm-dd"></div>
-                            </div>
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="datepicker2" data-date="" data-date-format="Y-mm-dd"></div>
-                            </div>
-                            <div class="col-xs-12 col-sm-6 col-lg-4 pull-right">
-                                <div id='datepicker-form' class='form-inline'>
-                                    <div id='date-range' class='form-date-group'>
-                                        <div class='form-date-heading'>
-                                            <span class="title">Date range</span>
-                                        </div>
-                                        <div class='form-date-body'>
-                                            <label>From</label>
-                                            <input class='date-input form-control' id='date-start'
-                                                   placeholder='Start' type='text' name="date_from" value=""
-                                                   data-date-format="Y-mm-dd" tabindex="1"/>
-                                            <label>to</label>
-                                            <input class='date-input form-control' id='date-end' placeholder='End'
-                                                   type='text' name="date_to" value="" data-date-format="Y-mm-dd"
-                                                   tabindex="2"/>
-                                        </div>
-                                    </div>
-                                    <div id="date-compare" class='form-date-group'>
-                                        <div class='form-date-heading'>
-                                                <span class="checkbox-title">
-                                                    <label>
-                                                        <input type='checkbox' id="datepicker-compare"
-                                                               name="datepicker_compare" tabindex="3">
-                                                        Compare to
-                                                    </label>
-                                                </span>
-                                            <select id="compare-options"
-                                                    class="form-control fixed-width-lg pull-right"
-                                                    name="compare_date_option">
-                                                <option value="1" selected="selected"
-                                                        label="Previous period">Previous period
-                                                </option>
-                                                <option value="2"
-                                                        label="Previous Year">Previous year
-                                                </option>
-                                                <option value="3" label="Custom">Custom</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-date-body" id="form-date-body-compare"
-                                             style="display: none;">
-                                            <label>From</label>
-                                            <input id="date-start-compare" class="date-input form-control"
-                                                   type="text" placeholder="Start" name="compare_date_from" value=""
-                                                   data-date-format="Y-mm-dd" tabindex="4"/>
-                                            <label>to</label>
-                                            <input id="date-end-compare" class="date-input form-control" type="text"
-                                                   placeholder="End" name="compare_date_to" value=""
-                                                   data-date-format="Y-mm-dd"
-                                                   tabindex="5"/>
-                                        </div>
-                                    </div>
-                                    <div class='form-date-actions'>
-                                        <button class='btn btn-link' type='button' id="datepicker-cancel"
-                                                tabindex="7">
-                                            <i class='fa-remove'></i>
-                                            Cancel
-                                        </button>
-                                        <button class='btn btn-default pull-right' type='submit'
-                                                name="submitDateRange" tabindex="6">
-                                            <i class='fa-ok text-success'></i>
-                                            Apply
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+<div id="calender"/>
+<!--<div class="bootstrap">-->
+    <!--<div id="calendar" class="panel">-->
+        <!--<form action="" method="post" id="calendar_form" name="calendar_form" class="form-inline">-->
+            <!--<div class="btn-group">-->
+                <!--<button type="button" name="submitDateDay" class="btn btn-default submitDateDay">-->
+                    <!--Day-->
+                <!--</button>-->
+                <!--<button type="button" name="submitDateMonth" class="btn btn-default submitDateMonth">-->
+                    <!--Month-->
+                <!--</button>-->
+                <!--<button type="button" name="submitDateYear" class="btn btn-default submitDateYear">-->
+                    <!--Year-->
+                <!--</button>-->
+                <!--<button type="button" name="submitDateDayPrev" class="btn btn-default submitDateDayPrev">-->
+                    <!--Day-1-->
+                <!--</button>-->
+                <!--<button type="button" name="submitDateMonthPrev" class="btn btn-default submitDateMonthPrev">-->
+                    <!--Month-1-->
+                <!--</button>-->
+                <!--<button type="button" name="submitDateYearPrev" class="btn btn-default submitDateYearPrev">-->
+                    <!--Year-1-->
+                <!--</button>-->
+            <!--</div>-->
+            <!--<div class="form-group pull-right">-->
+                <!--<button id="datepickerExpand" class="btn btn-default" type="button">-->
+                    <!--<i class="fa fa-calendar-empty"></i>-->
+							<!--<span class="hidden-xs">-->
+								<!--From-->
+                                <!--<strong class="text-info" id="datepicker-from-info"></strong>-->
+                                <!--To-->
+                                <!--<strong class="text-info" id="datepicker-to-info"></strong>-->
+								<!--<strong class="text-info" id="datepicker-diff-info"></strong>-->
+							<!--</span>-->
+                    <!--<i class="fa fa-caret-down"></i>-->
+                <!--</button>-->
+            <!--</div>-->
+            <!--<div id="datepicker" class="row row-padding-top hide">-->
+                <!--<div class="col-lg-12">-->
+                    <!--<div class="daterangepicker-days">-->
+                        <!--<div class="row">-->
+                            <!--<div class="col-sm-6 col-lg-4">-->
+                                <!--<div class="datepicker1" data-date="" data-date-format="Y-mm-dd"></div>-->
+                            <!--</div>-->
+                            <!--<div class="col-sm-6 col-lg-4">-->
+                                <!--<div class="datepicker2" data-date="" data-date-format="Y-mm-dd"></div>-->
+                            <!--</div>-->
+                            <!--<div class="col-xs-12 col-sm-6 col-lg-4 pull-right">-->
+                                <!--<div id='datepicker-form' class='form-inline'>-->
+                                    <!--<div id='date-range' class='form-date-group'>-->
+                                        <!--<div class='form-date-heading'>-->
+                                            <!--<span class="title">Date range</span>-->
+                                        <!--</div>-->
+                                        <!--<div class='form-date-body'>-->
+                                            <!--<label>From</label>-->
+                                            <!--<input class='date-input form-control' id='date-start'-->
+                                                   <!--placeholder='Start' type='text' name="date_from" value=""-->
+                                                   <!--data-date-format="Y-mm-dd" tabindex="1"/>-->
+                                            <!--<label>to</label>-->
+                                            <!--<input class='date-input form-control' id='date-end' placeholder='End'-->
+                                                   <!--type='text' name="date_to" value="" data-date-format="Y-mm-dd"-->
+                                                   <!--tabindex="2"/>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div id="date-compare" class='form-date-group'>-->
+                                        <!--<div class='form-date-heading'>-->
+                                                <!--<span class="checkbox-title">-->
+                                                    <!--<label>-->
+                                                        <!--<input type='checkbox' id="datepicker-compare"-->
+                                                               <!--name="datepicker_compare" tabindex="3">-->
+                                                        <!--Compare to-->
+                                                    <!--</label>-->
+                                                <!--</span>-->
+                                            <!--<select id="compare-options"-->
+                                                    <!--class="form-control fixed-width-lg pull-right"-->
+                                                    <!--name="compare_date_option">-->
+                                                <!--<option value="1" selected="selected"-->
+                                                        <!--label="Previous period">Previous period-->
+                                                <!--</option>-->
+                                                <!--<option value="2"-->
+                                                        <!--label="Previous Year">Previous year-->
+                                                <!--</option>-->
+                                                <!--<option value="3" label="Custom">Custom</option>-->
+                                            <!--</select>-->
+                                        <!--</div>-->
+                                        <!--<div class="form-date-body" id="form-date-body-compare"-->
+                                             <!--style="display: none;">-->
+                                            <!--<label>From</label>-->
+                                            <!--<input id="date-start-compare" class="date-input form-control"-->
+                                                   <!--type="text" placeholder="Start" name="compare_date_from" value=""-->
+                                                   <!--data-date-format="Y-mm-dd" tabindex="4"/>-->
+                                            <!--<label>to</label>-->
+                                            <!--<input id="date-end-compare" class="date-input form-control" type="text"-->
+                                                   <!--placeholder="End" name="compare_date_to" value=""-->
+                                                   <!--data-date-format="Y-mm-dd"-->
+                                                   <!--tabindex="5"/>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class='form-date-actions'>-->
+                                        <!--<button class='btn btn-link' type='button' id="datepicker-cancel"-->
+                                                <!--tabindex="7">-->
+                                            <!--<i class='fa-remove'></i>-->
+                                            <!--Cancel-->
+                                        <!--</button>-->
+                                        <!--<button class='btn btn-default pull-right' type='submit'-->
+                                                <!--name="submitDateRange" tabindex="6">-->
+                                            <!--<i class='fa-ok text-success'></i>-->
+                                            <!--Apply-->
+                                        <!--</button>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</form>-->
+    <!--</div>-->
+<!--</div>-->
 </body>
