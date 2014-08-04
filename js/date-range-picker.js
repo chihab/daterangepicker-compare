@@ -383,7 +383,7 @@
                   target.addClass("start-selected");
                   start = target.data("val");
                   $("#date-start").val(DPGlobal.formatDate(new Date(start), DPGlobal.parseFormat('Y-mm-dd')));
-                  $('#date-start').trigger('change');
+                  $('#date-start').trigger('pickerChange');
                 }
 
                 if (!switched) {
@@ -424,7 +424,7 @@
                   $("#date-end").val(DPGlobal.formatDate(new Date(end), DPGlobal.parseFormat('Y-mm-dd')));
                   click = 2;
                   $("#date-end").removeClass("input-selected").addClass("input-complete");
-                  $('#date-end').trigger('change');
+                  $('#date-end').trigger('pickerChange');
                 }
               }
             }
@@ -504,16 +504,16 @@
 
           if (startCompare && over < startCompare) {
             endCompare = startCompare;
-            $("#date-end-compare").val(DPGlobal.formatDate(new Date(startCompare), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
-            $("#date-start-compare").val(null).focus().addClass("input-selected");
+//            $("#date-end-compare").val(DPGlobal.formatDate(new Date(startCompare), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
+//            $("#date-start-compare").val(null).focus().addClass("input-selected");
             $("#datepicker .start-selected-compare").removeClass("start-selected-compare").addClass("end-selected-compare");
             startCompare = null;
             switched = true;
           }
           else if (endCompare && over > endCompare) {
             startCompare = endCompare;
-            $("#date-start-compare").val(DPGlobal.formatDate(new Date(endCompare), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
-            $("#date-end-compare").val(null).focus().addClass("input-selected");
+//            $("#date-start-compare").val(DPGlobal.formatDate(new Date(endCompare), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
+//            $("#date-end-compare").val(null).focus().addClass("input-selected");
             $("#datepicker .end-selected-compare").removeClass("end-selected-compare").addClass("start-selected-compare");
             endCompare = null;
             switched = false;
@@ -533,17 +533,17 @@
 
           if (start && over < start) {
             end = start;
-            $("#date-end").val(DPGlobal.formatDate(new Date(start), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
-            $('#date-end').trigger('change');
-            $("#date-start").val(null).focus().addClass("input-selected");
+//            $("#date-end").val(DPGlobal.formatDate(new Date(start), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
+//            $('#date-end').trigger('pickerChange');
+//            $("#date-start").val(null).focus().addClass("input-selected");
             $("#datepicker .start-selected").removeClass("start-selected").addClass("end-selected");
             start = null;
             switched = true;
           }
           else if (end && over > end) {
             start = end;
-            $("#date-start").val(DPGlobal.formatDate(new Date(end), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
-            $('#date-start').trigger('change');
+//            $("#date-start").val(DPGlobal.formatDate(new Date(end), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
+//            $('#date-start').trigger('pickerChange');
             $("#date-end").val(null).focus().addClass("input-selected");
             $("#datepicker .end-selected").removeClass("end-selected").addClass("start-selected");
             end = null;
