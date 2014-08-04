@@ -18,8 +18,9 @@
     "tests"
   ],
   "main": [
-    "js/calendar.js",
+    "js/utils.js",
     "js/date-range-picker.js",
+    "js/daterangepicker.js",
     "css/datepicker.css"
   ],
   "dependencies": {
