@@ -490,9 +490,9 @@
   $.fn.drp = function (options, cb) {
     this.each(function () {
       var el = $(this);
-      if (el.data('daterangepicker'))
-        el.data('daterangepicker').remove();
-      el.data('daterangepicker', new DRP(el, options, cb));
+      if (el.data('drp'))
+        el.data('drp').remove();
+      el.data('drp', new DRP(el, options, cb));
     });
     return this;
   };
