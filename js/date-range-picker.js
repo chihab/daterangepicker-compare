@@ -378,6 +378,7 @@
                   target.addClass("start-selected-compare");
                   startCompare = target.data("val");
                   $("#date-start-compare").val(DPGlobal.formatDate(new Date(startCompare), DPGlobal.parseFormat('Y-mm-dd')));
+                  $("#date-start-compare").trigger('pickerChange');
                 } else {
                   $(".start-selected").removeClass("start-selected");
                   target.addClass("start-selected");
@@ -415,6 +416,7 @@
                   target.addClass("end-selected-compare");
                   endCompare = target.data("val");
                   $("#date-end-compare").val(DPGlobal.formatDate(new Date(endCompare), DPGlobal.parseFormat('Y-mm-dd')));
+                  $("#date-end-compare").trigger('pickerChange');
                   click = 2;
                   $("#date-end-compare").removeClass("input-selected").addClass("input-complete");
                 } else {
