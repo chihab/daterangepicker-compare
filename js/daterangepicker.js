@@ -305,7 +305,7 @@
     },
 
     compareClick: function(event){
-      if ($(event.target).is(':checked')) {
+      if (compareElt.is(':checked')) {
         $('#compare-options').trigger('change');
         $('#form-date-body-compare').show();
         $('#compare-options').prop('disabled', false);
@@ -353,7 +353,7 @@
         startDateCompareElt.val(new Date(endCompare).format(format));
       compareElt.prop('checked', compare);
       this.updatePickerFromInput();
-      this.notify();
+      this.compareClick();
     },
 
     updatePickerFromInput : function() {
