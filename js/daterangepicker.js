@@ -2,7 +2,7 @@
 
   if (typeof define === 'function' && define.amd) {
     define(['jquery', 'exports'], function($, exports) {
-      root.daterangepicker = factory(root, exports, $);
+      root.drp = factory(root, exports, $);
     });
 
   } else if (typeof exports !== 'undefined') {
@@ -10,10 +10,10 @@
 
     // Finally, as a browser global.
   } else {
-    root.daterangepicker = factory(root, {}, (root.jQuery || root.Zepto || root.ender || root.$));
+    root.drp = factory(root, {}, (root.jQuery || root.Zepto || root.ender || root.$));
   }
 
-}(this, function(root, daterangepicker, $) {
+}(this, function(root, drp, $) {
   var datePickerStart = null, datePickerEnd = null;
   var startDateElt = null, endDateElt = null, startDateCompareElt = null, endDateCompareElt = null;
   var compareElt = null;
@@ -21,7 +21,7 @@
 
   var DRP = function (element, options, cb) {
 
-    // by default, the daterangepicker element is placed at the bottom of HTML body
+    // by default, the drp element is placed at the bottom of HTML body
     this.parentEl = 'body';
 
     //element that triggered the date range picker
@@ -175,7 +175,7 @@
     startDateCompareElt.on('pickerChange', $.proxy(this.notify, this));
     endDateCompareElt.on('pickerChange', $.proxy(this.notify, this));
 
-    datePickerStart = this.container.find('.datepicker1').daterangepicker({
+    datePickerStart = this.container.find('.datepicker1').calendar({
       "dates": translated_dates,
       "weekStart": 1,
       "start": startDateElt.val(),
@@ -184,9 +184,9 @@
       if (ev.date.valueOf() >= datePickerEnd.date.valueOf()) {
         datePickerEnd.setValue(ev.date.setMonth(ev.date.getMonth() + 1));
       }
-    }).data('daterangepicker');
+    }).data('calendar');
 
-    datePickerEnd = this.container.find('.datepicker2').daterangepicker({
+    datePickerEnd = this.container.find('.datepicker2').calendar({
       "dates": translated_dates,
       "weekStart": 1,
       "start": startDateElt.val(),
@@ -195,7 +195,7 @@
       if (ev.date.valueOf() <= datePickerStart.date.valueOf()) {
         datePickerStart.setValue(ev.date.setMonth(ev.date.getMonth() - 1));
       }
-    }).data('daterangepicker');
+    }).data('calendar');
 
     //Set first date picker to month -1 if same month
     var startDate = Date.parseDate(startDateElt.val(), format);
@@ -497,8 +497,8 @@
 
     remove: function() {
       this.container.remove();
-      this.element.off('.daterangepicker');
-      this.element.removeData('daterangepicker');
+      this.element.off('.drp');
+      this.element.removeData('drp');
     }
 
   };

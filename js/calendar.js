@@ -22,7 +22,7 @@
   var click, switched, val, start, end, over, compare, startCompare, endCompare;
 
   // Picker object
-  var DateRangePicker = function (element, options) {
+  var Calendar = function (element, options) {
     this.element = $(element);
     compare = false;
 
@@ -100,8 +100,8 @@
     this.showMode();
   };
 
-  DateRangePicker.prototype = {
-    constructor: DateRangePicker,
+  Calendar.prototype = {
+    constructor: Calendar,
 
     show: function (e) {
       this.picker.show();
@@ -112,7 +112,7 @@
       }
       var that = this;
       $(document).on('mousedown', function (ev) {
-        if ($(ev.target).closest('.daterangepicker').length === 0) {
+        if ($(ev.target).closest('.calendar').length === 0) {
           that.hide();
         }
       });
@@ -604,13 +604,13 @@
     }
   };
 
-  $.fn.daterangepicker = function (option, val) {
+  $.fn.calendar = function (option, val) {
     return this.each(function () {
       var $this = $(this),
-        data = $this.data('daterangepicker'),
+        data = $this.data('calendar'),
         options = typeof option === 'object' && option;
       if (!data) {
-        $this.data('daterangepicker', (data = new DateRangePicker(this, $.extend({}, $.fn.daterangepicker.defaults, options))));
+        $this.data('calendar', (data = new Calendar(this, $.extend({}, $.fn.calendar.defaults, options))));
       }
       if (typeof option === 'string') {
         data[option](val);
@@ -618,12 +618,12 @@
     });
   };
 
-  $.fn.daterangepicker.defaults = {
+  $.fn.calendar.defaults = {
     onRender: function () {
       return '';
     }
   };
-  $.fn.daterangepicker.Constructor = DateRangePicker;
+  $.fn.calendar.Constructor = Calendar;
 
   var DPGlobal = {
     modes: [
@@ -729,7 +729,7 @@
       '</thead>',
     contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>'
   };
-  DPGlobal.template = '<div class="daterangepicker">' +
+  DPGlobal.template = '<div class="calendar">' +
     '<div class="daterangepicker-days">' +
     '<table class=" table-condensed">' +
     DPGlobal.headTemplate +

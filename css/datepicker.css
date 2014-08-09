@@ -87,7 +87,7 @@
     margin: 5px 0 0 0
 }
 
-.bootstrap #datepicker .daterangepicker {
+.bootstrap #datepicker .calendar {
     position: relative;
     width: 100%;
     font-size: 13px;
@@ -95,13 +95,13 @@
     margin: 0 0 8px 0
 }
 
-.bootstrap #datepicker .daterangepicker table {
+.bootstrap #datepicker .calendar table {
     width: 100%;
     margin: 0;
     border-spacing: 1px
 }
 
-.bootstrap #datepicker .daterangepicker thead tr th {
+.bootstrap #datepicker .calendar thead tr th {
     background-color: #0092ce;
     color: #fff;
     font-size: 0.7em;
@@ -109,7 +109,7 @@
     text-transform: uppercase
 }
 
-.bootstrap #datepicker .daterangepicker thead tr:first-child th {
+.bootstrap #datepicker .calendar thead tr:first-child th {
     background-color: #fff;
     border-bottom: 1px solid #0092ce;
     font-weight: 200;
@@ -117,17 +117,17 @@
     color: #00a4e7
 }
 
-.bootstrap #datepicker .daterangepicker td, .bootstrap #datepicker .daterangepicker th {
+.bootstrap #datepicker .calendar td, .bootstrap #datepicker .calendar th {
     text-align: center;
     padding: 0;
     position: relative
 }
 
-.bootstrap #datepicker .daterangepicker tr {
+.bootstrap #datepicker .calendar tr {
     border-bottom: solid 1px #fff
 }
 
-.bootstrap #datepicker .daterangepicker td {
+.bootstrap #datepicker .calendar td {
     color: #00a4e7;
     height: 2.4em;
     padding: 0 8px;
@@ -139,7 +139,7 @@
     transition-timing-function: ease-out
 }
 
-.bootstrap #datepicker .daterangepicker td.day:after {
+.bootstrap #datepicker .calendar td.day:after {
     content: "";
     position: absolute;
     display: block;
@@ -150,19 +150,19 @@
     left: 0
 }
 
-.bootstrap #datepicker .daterangepicker td.day:hover {
+.bootstrap #datepicker .calendar td.day:hover {
     cursor: pointer
 }
 
-.bootstrap #datepicker .daterangepicker td.day.disabled {
+.bootstrap #datepicker .calendar td.day.disabled {
     color: #ccc
 }
 
-.bootstrap #datepicker .daterangepicker td.old, .bootstrap #datepicker .daterangepicker td.new {
+.bootstrap #datepicker .calendar td.old, .bootstrap #datepicker .calendar td.new {
     color: #ccc
 }
 
-.bootstrap #datepicker .daterangepicker td.start-selected:not(.old):not(.new):not(.end-selected) {
+.bootstrap #datepicker .calendar td.start-selected:not(.old):not(.new):not(.end-selected) {
     color: #fff;
     font-weight: 700;
     background-color: #00a4e7;
@@ -170,22 +170,22 @@
     border-top-left-radius: 15px
 }
 
-.bootstrap #datepicker .daterangepicker td.start-selected:not(.old):not(.new):not(.end-selected).range-compare {
+.bootstrap #datepicker .calendar td.start-selected:not(.old):not(.new):not(.end-selected).range-compare {
     background-color: #4ca0b1;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0
 }
 
-.bootstrap #datepicker .daterangepicker td.start-selected:not(.old):not(.new):not(.end-selected).end-selected-compare, .bootstrap #datepicker .daterangepicker td.start-selected:not(.old):not(.new):not(.end-selected).start-selected-compare {
+.bootstrap #datepicker .calendar td.start-selected:not(.old):not(.new):not(.end-selected).end-selected-compare, .bootstrap #datepicker .calendar td.start-selected:not(.old):not(.new):not(.end-selected).start-selected-compare {
     background-color: #4c99a1
 }
 
-.bootstrap #datepicker .daterangepicker td.start-selected:not(.old):not(.new):not(.end-selected).end-selected-compare {
+.bootstrap #datepicker .calendar td.start-selected:not(.old):not(.new):not(.end-selected).end-selected-compare {
     -webkit-border-radius: 0;
     border-radius: 0
 }
 
-.bootstrap #datepicker .daterangepicker td.end-selected:not(.old):not(.new):not(.start-selected) {
+.bootstrap #datepicker .calendar td.end-selected:not(.old):not(.new):not(.start-selected) {
     color: #fff;
     font-weight: 700;
     background-color: #00a4e7;
@@ -193,22 +193,22 @@
     border-top-right-radius: 15px
 }
 
-.bootstrap #datepicker .daterangepicker td.end-selected:not(.old):not(.new):not(.start-selected).range-compare {
+.bootstrap #datepicker .calendar td.end-selected:not(.old):not(.new):not(.start-selected).range-compare {
     background-color: #4ca0b1;
     border-bottom-right-radius: 0;
     border-top-right-radius: 0
 }
 
-.bootstrap #datepicker .daterangepicker td.end-selected:not(.old):not(.new):not(.start-selected).end-selected-compare, .bootstrap #datepicker .daterangepicker td.end-selected:not(.old):not(.new):not(.start-selected).start-selected-compare {
+.bootstrap #datepicker .calendar td.end-selected:not(.old):not(.new):not(.start-selected).end-selected-compare, .bootstrap #datepicker .calendar td.end-selected:not(.old):not(.new):not(.start-selected).start-selected-compare {
     background-color: #4c99a1
 }
 
-.bootstrap #datepicker .daterangepicker td.end-selected:not(.old):not(.new):not(.start-selected).start-selected-compare {
+.bootstrap #datepicker .calendar td.end-selected:not(.old):not(.new):not(.start-selected).start-selected-compare {
     -webkit-border-radius: 0;
     border-radius: 0
 }
 
-.bootstrap #datepicker .daterangepicker td.start-selected-compare:not(.old):not(.new):not(.end-selected-compare) {
+.bootstrap #datepicker .calendar td.start-selected-compare:not(.old):not(.new):not(.end-selected-compare) {
     color: #fff;
     font-weight: 700;
     background-color: #ff8000;
@@ -216,13 +216,13 @@
     border-top-left-radius: 15px
 }
 
-.bootstrap #datepicker .daterangepicker td.start-selected-compare:not(.old):not(.new):not(.end-selected-compare).range {
+.bootstrap #datepicker .calendar td.start-selected-compare:not(.old):not(.new):not(.end-selected-compare).range {
     background-color: #ba924c;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0
 }
 
-.bootstrap #datepicker .daterangepicker td.end-selected-compare:not(.old):not(.new):not(.start-selected-compare) {
+.bootstrap #datepicker .calendar td.end-selected-compare:not(.old):not(.new):not(.start-selected-compare) {
     color: #fff;
     font-weight: 700;
     background-color: #ff8000;
@@ -230,13 +230,13 @@
     border-top-right-radius: 15px
 }
 
-.bootstrap #datepicker .daterangepicker td.end-selected-compare:not(.old):not(.new):not(.start-selected-compare).range {
+.bootstrap #datepicker .calendar td.end-selected-compare:not(.old):not(.new):not(.start-selected-compare).range {
     background-color: #ba924c;
     border-bottom-right-radius: 0;
     border-top-right-radius: 0
 }
 
-.bootstrap #datepicker .daterangepicker td.end-selected.start-selected {
+.bootstrap #datepicker .calendar td.end-selected.start-selected {
     color: #fff;
     -webkit-border-radius: 15px;
     border-radius: 15px;
@@ -244,13 +244,13 @@
     background-color: #00a4e7
 }
 
-.bootstrap #datepicker .daterangepicker td.end-selected.start-selected.range-compare {
+.bootstrap #datepicker .calendar td.end-selected.start-selected.range-compare {
     background-color: #4ca0b1;
     -webkit-border-radius: 0;
     border-radius: 0
 }
 
-.bootstrap #datepicker .daterangepicker td.end-selected-compare.start-selected-compare {
+.bootstrap #datepicker .calendar td.end-selected-compare.start-selected-compare {
     color: #fff;
     -webkit-border-radius: 15px;
     border-radius: 15px;
@@ -258,35 +258,35 @@
     background-color: #ff8000
 }
 
-.bootstrap #datepicker .daterangepicker td.end-selected-compare.start-selected-compare.range {
+.bootstrap #datepicker .calendar td.end-selected-compare.start-selected-compare.range {
     background-color: #ba924c;
     -webkit-border-radius: 0;
     border-radius: 0
 }
 
-.bootstrap #datepicker .daterangepicker td.range {
+.bootstrap #datepicker .calendar td.range {
     color: #cef1ff;
     background-color: #1bbdff
 }
 
-.bootstrap #datepicker .daterangepicker td.range.range-compare {
+.bootstrap #datepicker .calendar td.range.range-compare {
     background-color: #8dab99
 }
 
-.bootstrap #datepicker .daterangepicker td.range-compare {
+.bootstrap #datepicker .calendar td.range-compare {
     color: #fff2e5;
     background-color: #f93
 }
 
-.bootstrap #datepicker .daterangepicker td.range-compare.range {
+.bootstrap #datepicker .calendar td.range-compare.range {
     background-color: #8dab99
 }
 
-.bootstrap #datepicker .daterangepicker td.today {
+.bootstrap #datepicker .calendar td.today {
     background-color: #fff
 }
 
-.bootstrap #datepicker .daterangepicker td span {
+.bootstrap #datepicker .calendar td span {
     padding: 0;
     display: block;
     width: 33.333%;
@@ -298,41 +298,41 @@
     cursor: pointer
 }
 
-.bootstrap #datepicker .daterangepicker td span:hover {
+.bootstrap #datepicker .calendar td span:hover {
     color: #fff;
     background-color: #00a4e7
 }
 
-.bootstrap #datepicker .daterangepicker td span.active {
+.bootstrap #datepicker .calendar td span.active {
     background-color: #00a4e7;
     color: #fff
 }
 
-.bootstrap #datepicker .daterangepicker td span.old {
+.bootstrap #datepicker .calendar td span.old {
     color: #ccc
 }
 
-.bootstrap #datepicker .daterangepicker th.next {
+.bootstrap #datepicker .calendar th.next {
     text-align: right;
     padding: 0 10px 0 0
 }
 
-.bootstrap #datepicker .daterangepicker th.prev {
+.bootstrap #datepicker .calendar th.prev {
     text-align: left;
     padding: 0 0 0 10px
 }
 
-.bootstrap #datepicker .daterangepicker th.next, .bootstrap #datepicker .daterangepicker th.prev, .bootstrap #datepicker .daterangepicker th.month-switch {
+.bootstrap #datepicker .calendar th.next, .bootstrap #datepicker .calendar th.prev, .bootstrap #datepicker .calendar th.month-switch {
     font-size: 1.3em;
     line-height: 2em;
     height: 2em
 }
 
-.bootstrap #datepicker .daterangepicker th.next:hover, .bootstrap #datepicker .daterangepicker th.prev:hover, .bootstrap #datepicker .daterangepicker th.month-switch:hover {
+.bootstrap #datepicker .calendar th.next:hover, .bootstrap #datepicker .calendar th.prev:hover, .bootstrap #datepicker .calendar th.month-switch:hover {
     background-color: #0092ce;
     color: #fff
 }
 
-.bootstrap #datepicker .daterangepicker thead tr:first-child th {
+.bootstrap #datepicker .calendar thead tr:first-child th {
     cursor: pointer
 }
