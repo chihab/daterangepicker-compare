@@ -1,7 +1,7 @@
-(function(root, factory) {
+(function (root, factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(['jquery', 'exports'], function($, exports) {
+    define(['jquery', 'exports'], function ($, exports) {
       root.drp = factory(root, exports, $);
     });
 
@@ -13,7 +13,7 @@
     root.drp = factory(root, {}, (root.jQuery || root.Zepto || root.ender || root.$));
   }
 
-}(this, function(root, drp, $) {
+}(this, function (root, drp, $) {
   var datePickerStart = null, datePickerEnd = null;
   var startDateElt = null, endDateElt = null, startDateCompareElt = null, endDateCompareElt = null;
   var compareElt = null;
@@ -28,7 +28,7 @@
     this.element = $(element);
 
     //create the picker HTML object
-    var DRPTemplate="";
+    var DRPTemplate = "";
     DRPTemplate += "<div class=\"bootstrap\">";
     DRPTemplate += "    <div id=\"calendar\" class=\"panel\">";
     DRPTemplate += "        <form action=\"\" method=\"post\" id=\"calendar_form\" name=\"calendar_form\" class=\"form-inline\">";
@@ -170,10 +170,6 @@
     endDateCompareElt.on('change', $.proxy(this.endDateCompareChange, this));
     compareElt.on('click', $.proxy(this.compareClick, this));
 
-    startDateElt.on('pickerChange', $.proxy(this.notify, this));
-    endDateElt.on('pickerChange', $.proxy(this.endDatePickerChange, this));
-    startDateCompareElt.on('pickerChange', $.proxy(this.notify, this));
-    endDateCompareElt.on('pickerChange', $.proxy(this.notify, this));
 
     datePickerStart = this.container.find('.datepicker1').calendar({
       "dates": translated_dates,
@@ -181,10 +177,13 @@
       "start": startDateElt.val(),
       "end": endDateElt.val()
     }).on('changeDate', function (ev) {
-      if (ev.date.valueOf() >= datePickerEnd.date.valueOf()) {
+      if (ev.date.valueOf() >= datePickerEnd.viewDate.valueOf()) {
         datePickerEnd.setValue(ev.date.setMonth(ev.date.getMonth() + 1));
       }
-    }).data('calendar');
+    }).on('mouseenter', function () {
+      datePickerEnd.fillMonthStart();
+    }).on('pickerChange', $.proxy(this.datePickerStartChange, this))
+      .data('calendar');
 
     datePickerEnd = this.container.find('.datepicker2').calendar({
       "dates": translated_dates,
@@ -192,10 +191,13 @@
       "start": startDateElt.val(),
       "end": endDateElt.val()
     }).on('changeDate', function (ev) {
-      if (ev.date.valueOf() <= datePickerStart.date.valueOf()) {
+      if (ev.date.valueOf() <= datePickerStart.viewDate.valueOf()) {
         datePickerStart.setValue(ev.date.setMonth(ev.date.getMonth() - 1));
       }
-    }).data('calendar');
+    }).on('mouseenter', function () {
+        datePickerStart.fillMonthEnd();
+    }).on('pickerChange', $.proxy(this.datePickerEndChange, this))
+      .data('calendar');
 
     //Set first date picker to month -1 if same month
     var startDate = Date.parseDate(startDateElt.val(), format);
@@ -277,34 +279,70 @@
   DRP.prototype = {
     constructor: DRP,
 
+    datePickerChange: function (event, input, value) {
+      var element = null;
+      switch (input) {
+        case 'date-start':
+          element = startDateElt;
+          break;
+        case 'date-end':
+          element = endDateElt;
+          break;
+        case 'date-start-compare':
+          element = startDateCompareElt;
+          break;
+        case 'date-end-compare':
+          element = endDateCompareElt;
+          break;
+      }
+      if (element && value) {
+        element.val(new Date(value).format(format));
+        element.removeClass("input-selected").addClass("input-complete");
+        if (element === endDateElt)
+          this.updateCompareRange();
+      }
+      return element;
+    },
+
+    datePickerStartChange: function (event, input, value) {
+      var element = this.datePickerChange(event, input, value);
+      if (element == startDateElt || element == startDateCompareElt)
+        datePickerEnd.clearRange();
+    },
+
+    datePickerEndChange: function (event, input, value) {
+      var element = this.datePickerChange(event, input, value);
+      if (element == startDateElt || element == startDateCompareElt)
+        datePickerStart.clearRange();
+    },
+
     startDateChange: function (event) {
       this.updatePickerFromInput();
       this.notify();
     },
+
     endDateChange: function (event) {
       this.updatePickerFromInput();
       this.notify();
     },
+
     startDateCompareChange: function (event) {
       this.updatePickerFromInput();
       this.notify();
     },
+
     endDateCompareChange: function (event) {
       this.updatePickerFromInput();
       this.notify();
     },
-    endDatePickerChange: function (event) {
-      this.updateCompareRange();
-      this.notify();
-    },
 
-    compareOptionsChange: function(event){
+    compareOptionsChange: function (event) {
       this.updateCompareRange();
       if (event.target.value == 3)
         startDateCompareElt.focus();
     },
 
-    compareClick: function(event){
+    compareClick: function (event) {
       if (compareElt.is(':checked')) {
         $('#compare-options').trigger('change');
         $('#form-date-body-compare').show();
@@ -321,15 +359,15 @@
       }
     },
 
-    updateCompareRange : function() {
-      if (compareElt.is(':checked')){
+    updateCompareRange: function () {
+      if (compareElt.is(':checked')) {
         var compare = true;
-        if ($('#compare-options').val() == 1){
+        if ($('#compare-options').val() == 1) {
           compare = false;
           this.setPreviousPeriod();
         }
 
-        if ($('#compare-options').val() == 2){
+        if ($('#compare-options').val() == 2) {
           compare = false;
           this.setPreviousYear();
         }
@@ -342,21 +380,21 @@
       }
     },
 
-    updatePickerInput: function(start, end, startCompare, endCompare, compare) {
-      if(start)
+    updatePickerInput: function (start, end, startCompare, endCompare, compare) {
+      if (start)
         startDateElt.val(new Date(start).format(format));
-      if(end)
+      if (end)
         endDateElt.val(new Date(end).format(format));
-      if(startCompare)
+      if (startCompare)
         startDateCompareElt.val(new Date(startCompare).format(format));
-      if(endCompare)
+      if (endCompare)
         startDateCompareElt.val(new Date(endCompare).format(format));
       compareElt.prop('checked', compare);
       this.updatePickerFromInput();
       this.compareClick();
     },
 
-    updatePickerFromInput : function() {
+    updatePickerFromInput: function () {
       datePickerStart.setStart(startDateElt.val());
       datePickerStart.setEnd(endDateElt.val());
       datePickerEnd.setStart(startDateElt.val());
@@ -367,7 +405,7 @@
       this.updateCompareRange();
     },
 
-    setDayPeriod : function() {
+    setDayPeriod: function () {
       var date = new Date();
       startDateElt.val(date.format(format));
       endDateElt.val(date.format(format));
@@ -379,7 +417,7 @@
       this.notify();
     },
 
-    setPreviousDayPeriod : function() {
+    setPreviousDayPeriod: function () {
       var date = new Date();
       date = date.subDays(1);
       startDateElt.val(date.format(format));
@@ -391,7 +429,7 @@
       $('#preselectDateRange').val('prev-day');
     },
 
-    setMonthPeriod : function() {
+    setMonthPeriod: function () {
       var date = new Date();
       endDateElt.val(date.format(format));
       date = new Date(date.setDate(1));
@@ -403,7 +441,7 @@
       $('#preselectDateRange').val('month');
     },
 
-    setPreviousMonthPeriod : function() {
+    setPreviousMonthPeriod: function () {
       var date = new Date();
       date = new Date(date.getFullYear(), date.getMonth(), 0);
       endDateElt.val(date.format(format));
@@ -416,7 +454,7 @@
       $('#preselectDateRange').val('prev-month');
     },
 
-    setYearPeriod : function() {
+    setYearPeriod: function () {
       var date = new Date();
       endDateElt.val(date.format(format));
       date = new Date(date.getFullYear(), 0, 1);
@@ -428,7 +466,7 @@
       $('#preselectDateRange').val('year');
     },
 
-    setPreviousYearPeriod : function() {
+    setPreviousYearPeriod: function () {
       var date = new Date();
       date = new Date(date.getFullYear(), 11, 31);
       date = date.subYears(1);
@@ -442,8 +480,7 @@
       $('#preselectDateRange').val('prev-year');
     },
 
-
-    setPreviousPeriod : function() {
+    setPreviousPeriod: function () {
       var startDate = Date.parseDate(startDateElt.val(), format).subDays(1);
       var endDate = Date.parseDate(endDateElt.val(), format).subDays(1);
 
@@ -455,7 +492,7 @@
       this.notify();
     },
 
-    setPreviousYear : function() {
+    setPreviousYear: function () {
       var startDate = Date.parseDate(startDateElt.val(), format).subYears(1);
       var endDate = Date.parseDate(endDateElt.val(), format).subYears(1);
       startDateCompareElt.val(startDate.format(format));
@@ -467,26 +504,30 @@
       this.cb(this.getStart(), this.getEnd(), this.getStartCompare(), this.getEndCompare(), this.getCompare());
     },
 
-    getStart: function (){
+    getStart: function () {
       return Date.parseDate(startDateElt.val(), format);
     },
+
     getEnd: function () {
       return Date.parseDate(endDateElt.val(), format);
     },
+
     getStartCompare: function () {
       return Date.parseDate(startDateCompareElt.val(), format);
     },
+
     getEndCompare: function () {
       return Date.parseDate(endDateCompareElt.val(), format);
     },
+
     getCompare: function () {
       return compareElt.is(':checked');
     },
 
-    setOptions: function(options, callback) {
+    setOptions: function (options, callback) {
       format = 'Y-mm-dd';
-      this.cb = function () { };
-
+      this.cb = function () {
+      };
       if (typeof options.format === 'string')
         format = options.format;
 
@@ -495,7 +536,7 @@
       }
     },
 
-    remove: function() {
+    remove: function () {
       this.container.remove();
       this.element.off('.drp');
       this.element.removeData('drp');

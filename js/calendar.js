@@ -31,7 +31,7 @@
     }
 
     if (typeof options.start !== 'undefined') {
-      if (options.start.constructor === String) {
+      if (options.start.constructor === String && options.start != "") {
         start = DPGlobal.parseDate(options.start, DPGlobal.parseFormat('Y-mm-dd')).getTime();
       } else if (options.start.constructor === Number) {
         start = options.start;
@@ -41,7 +41,7 @@
     }
 
     if (typeof options.end !== 'undefined') {
-      if (options.end.constructor === String) {
+      if (options.end.constructor === String && options.start != "") {
         end = DPGlobal.parseDate(options.end, DPGlobal.parseFormat('Y-mm-dd')).getTime();
       } else if (options.end.constructor === Number) {
         end = options.end;
@@ -59,7 +59,8 @@
       .on({
         click: $.proxy(this.click, this),
         mouseover: $.proxy(this.mouseover, this),
-        mouseout: $.proxy(this.mouseout, this)
+        mouseout: $.proxy(this.mouseout, this),
+        mouseenter: $.proxy(this.mouseenter, this)
       });
 
     this.minViewMode = options.minViewMode || this.element.data('date-minviewmode') || 0;
@@ -90,7 +91,6 @@
           break;
       }
     }
-    this.startViewMode = this.viewMode;
     this.weekStart = options.weekStart || this.element.data('date-weekstart') || 0;
     this.weekEnd = this.weekStart === 0 ? 6 : this.weekStart - 1;
     this.onRender = options.onRender;
@@ -345,9 +345,9 @@
               if (start && end) {
                 if (!compare) {
                   click = 2;
-                  $(".range").removeClass('range');
-                  $(".start-selected").removeClass("start-selected");
-                  $(".end-selected").removeClass("end-selected");
+                  this.element.find(".range").removeClass('range');
+                  this.element.find(".start-selected").removeClass("start-selected");
+                  this.element.find(".end-selected").removeClass("end-selected");
                 }
               }
               if (click === 2) {
@@ -362,29 +362,33 @@
                 click = null;
                 switched = false;
                 if (compare) {
-                  $("td.day").removeClass("start-selected-compare").removeClass("end-selected-compare");
-                  $(".date-input").removeClass("input-selected").removeClass("input-complete");
-                  $(".range-compare").removeClass("range-compare");
+                  this.element.find("td.day").removeClass("start-selected-compare").removeClass("end-selected-compare");
+//                  this.picker.find(".date-input").removeClass("input-selected").removeClass("input-complete");
+                  this.picker.find(".range-compare").removeClass("range-compare");
                 } else {
-                  $("td.day").removeClass("start-selected").removeClass("end-selected");
-                  $(".date-input").removeClass("input-selected").removeClass("input-complete");
-                  $(".range").removeClass("range");
+                  this.element.find("td.day").removeClass("start-selected").removeClass("end-selected");
+//                  this.element.find(".date-input").removeClass("input-selected").removeClass("input-complete");
+                  this.element.find(".range").removeClass("range");
                 }
               }
               //define start with first click or switched one
               if (!click || switched === true) {
                 if (compare) {
-                  $(".start-selected-compare").removeClass("start-selected-compare");
+                  this.element.find(".start-selected-compare").removeClass("start-selected-compare");
                   target.addClass("start-selected-compare");
+                  if (switched)
+                    this.element.trigger('pickerChange', ['date-end-compare', endCompare]);
                   startCompare = target.data("val");
-                  $("#date-start-compare").val(DPGlobal.formatDate(new Date(startCompare), DPGlobal.parseFormat('Y-mm-dd')));
-                  $("#date-start-compare").trigger('pickerChange');
+//                  $("#date-start-compare").val(DPGlobal.formatDate(new Date(startCompare), DPGlobal.parseFormat('Y-mm-dd')));
+                  this.element.trigger('pickerChange', ['date-start-compare', startCompare]);
                 } else {
-                  $(".start-selected").removeClass("start-selected");
+                  this.element.find(".start-selected").removeClass("start-selected");
+                  if (switched)
+                    this.element.trigger('pickerChange', ['date-end', end]);
                   target.addClass("start-selected");
                   start = target.data("val");
-                  $("#date-start").val(DPGlobal.formatDate(new Date(start), DPGlobal.parseFormat('Y-mm-dd')));
-                  $('#date-start').trigger('pickerChange');
+//                  this.picker.find("#date-start").val(DPGlobal.formatDate(new Date(start), DPGlobal.parseFormat('Y-mm-dd')));
+                  this.element.trigger('pickerChange', ["date-start", start]);
                 }
 
                 if (!switched) {
@@ -394,39 +398,39 @@
                 }
                 if (!switched) {
                   if (compare) {
-                    $("#date-end-compare").val(null).focus().addClass("input-selected");
+                    this.element.find("#date-end-compare").val(null).focus().addClass("input-selected");
                     target.addClass("start-selected-compare").addClass("end-selected-compare");
                   } else {
-                    $("#date-end").val(null).focus().addClass("input-selected");
+                    this.element.find("#date-end").val(null).focus().addClass("input-selected");
                     target.addClass("start-selected").addClass("end-selected");
                   }
                 }
 
-                if (compare) {
-                  $("#date-start-compare").removeClass("input-selected").addClass("input-complete");
-                }
-                else {
-                  $("#date-start").removeClass("input-selected").addClass("input-complete");
-                }
+//                if (compare) {
+//                  $("#date-start-compare").removeClass("input-selected").addClass("input-complete");
+//                }
+//                else {
+//                  $("#date-start").removeClass("input-selected").addClass("input-complete");
+//                }
               }
               //define end
               else {
                 if (compare) {
-                  $(".end-selected-compare").removeClass("end-selected-compare");
+                  this.element.find(".end-selected-compare").removeClass("end-selected-compare");
                   target.addClass("end-selected-compare");
                   endCompare = target.data("val");
-                  $("#date-end-compare").val(DPGlobal.formatDate(new Date(endCompare), DPGlobal.parseFormat('Y-mm-dd')));
-                  $("#date-end-compare").trigger('pickerChange');
+//                  $("#date-end-compare").val(DPGlobal.formatDate(new Date(endCompare), DPGlobal.parseFormat('Y-mm-dd')));
+                  this.element.trigger('pickerChange', ['date-end-compare', endCompare]);
                   click = 2;
-                  $("#date-end-compare").removeClass("input-selected").addClass("input-complete");
+//                  this.picker.find("#date-end-compare").removeClass("input-selected").addClass("input-complete");
                 } else {
-                  $(".end-selected").removeClass("end-selected");
+                  this.element.find(".end-selected").removeClass("end-selected");
                   target.addClass("end-selected");
                   end = target.data("val");
-                  $("#date-end").val(DPGlobal.formatDate(new Date(end), DPGlobal.parseFormat('Y-mm-dd')));
+//                  $("#date-end").val(DPGlobal.formatDate(new Date(end), DPGlobal.parseFormat('Y-mm-dd')));
                   click = 2;
-                  $("#date-end").removeClass("input-selected").addClass("input-complete");
-                  $('#date-end').trigger('pickerChange');
+//                  $("#date-end").removeClass("input-selected").addClass("input-complete");
+                  this.element.trigger('pickerChange', ['date-end', end]);
                 }
               }
             }
@@ -435,8 +439,83 @@
       }
     },
 
+    clearRange: function() {
+      if (!switched) {
+        if (compare) {
+          this.element.find(".range-compare").removeClass('range-compare');
+          this.element.find(".start-selected-compare").removeClass("start-selected-compare");
+          this.element.find(".end-selected-compare").removeClass("end-selected-compare");
+        }
+        else {
+          this.element.find(".range").removeClass('range');
+          this.element.find(".start-selected").removeClass("start-selected");
+          this.element.find(".end-selected").removeClass("end-selected");
+        }
+      }
+    },
+
+    fillMonthEnd: function() {
+      if (click == 1) {
+        this.element.find(".day").each(function () {
+          var date_val = parseInt($(this).data('val'), 10);
+          if (compare) {
+            if (startCompare) {
+              $(this).removeClass("range-compare").removeClass("start-selected-compare").removeClass("end-selected-compare");
+
+              if (date_val > startCompare) {
+                $(this).addClass("range-compare");
+              }
+              if (date_val === startCompare) {
+                $(this).addClass("start-selected-compare");
+              }
+            }
+          }
+          else if (start) {
+            if (date_val > start) {
+              $(this).addClass("range");
+            }
+            if (date_val === start) {
+              $(this).addClass("start-selected");
+            }
+          } else {
+            $(this).removeClass("range-compare").removeClass("start-selected-compare").removeClass("end-selected-compare");
+          }
+        });
+      }
+    },
+
+    fillMonthStart: function() {
+      if (click == 1) {
+        this.element.find(".day").each(function () {
+          var date_val = parseInt($(this).data('val'), 10);
+          if (compare) {
+            if (endCompare) {
+              $(this).removeClass("range-compare").removeClass("start-selected-compare").removeClass("end-selected-compare");
+
+              if (date_val < endCompare) {
+                $(this).addClass("range-compare");
+              }
+              if (date_val === endCompare) {
+                $(this).addClass("end-selected-compare");
+              }
+            }
+          }
+          else if (end) {
+            if (date_val < end) {
+              $(this).addClass("range");
+            }
+            if (date_val === end) {
+              $(this).addClass("end-selected");
+            }
+          } else {
+            $(this).removeClass("range-compare").removeClass("start-selected-compare").removeClass("end-selected-compare");
+          }
+        });
+      }
+    },
+
     updateRange: function () {
-      $("#datepicker .day").each(function () {
+      this.element.find(".day").each(function () {
         var date_val = parseInt($(this).data('val'), 10);
 
         if (end && start) {
@@ -471,7 +550,7 @@
 
     mouseoverRange: function () {
       //range
-      $("#datepicker .day").each(function () {
+      this.element.find(".day").each(function () {
         var date_val = parseInt($(this).data('val'), 10);
         if (compare) {
           if (!endCompare && date_val > startCompare && date_val < over) {
@@ -502,13 +581,13 @@
       //action when one of two dates has been set
       if (click === 1 && over) {
         if (compare) {
-          $("#datepicker .range-compare").removeClass("range-compare");
+          this.element.find(".range-compare").removeClass("range-compare");
 
           if (startCompare && over < startCompare) {
             endCompare = startCompare;
 //            $("#date-end-compare").val(DPGlobal.formatDate(new Date(startCompare), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
 //            $("#date-start-compare").val(null).focus().addClass("input-selected");
-            $("#datepicker .start-selected-compare").removeClass("start-selected-compare").addClass("end-selected-compare");
+            this.element.find(".start-selected-compare").removeClass("start-selected-compare").addClass("end-selected-compare");
             startCompare = null;
             switched = true;
           }
@@ -516,53 +595,53 @@
             startCompare = endCompare;
 //            $("#date-start-compare").val(DPGlobal.formatDate(new Date(endCompare), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
 //            $("#date-end-compare").val(null).focus().addClass("input-selected");
-            $("#datepicker .end-selected-compare").removeClass("end-selected-compare").addClass("start-selected-compare");
+            this.element.find(".end-selected-compare").removeClass("end-selected-compare").addClass("start-selected-compare");
             endCompare = null;
             switched = false;
           }
 
           if (startCompare) {
-            $(".end-selected-compare").removeClass("end-selected-compare");
+            this.element.find(".end-selected-compare").removeClass("end-selected-compare");
             $(e.target).addClass("end-selected-compare");
           }
           else if (endCompare) {
-            $(".start-selected-compare").removeClass("start-selected-compare");
+            this.element.find(".start-selected-compare").removeClass("start-selected-compare");
             $(e.target).addClass("start-selected-compare");
           }
         }
         else {
-          $("#datepicker .range").removeClass("range");
+          this.element.find(".range").removeClass("range");
 
           if (start && over < start) {
             end = start;
 //            $("#date-end").val(DPGlobal.formatDate(new Date(start), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
 //            $('#date-end').trigger('pickerChange');
 //            $("#date-start").val(null).focus().addClass("input-selected");
-            $("#datepicker .start-selected").removeClass("start-selected").addClass("end-selected");
+            this.element.find(".start-selected").removeClass("start-selected").addClass("end-selected");
             start = null;
             switched = true;
           }
           else if (end && over > end) {
             start = end;
-//            $("#date-start").val(DPGlobal.formatDate(new Date(end), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
+//            this.picker.find("#date-start").val(DPGlobal.formatDate(new Date(end), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
 //            $('#date-start').trigger('pickerChange');
-            $("#date-end").val(null).focus().addClass("input-selected");
-            $("#datepicker .end-selected").removeClass("end-selected").addClass("start-selected");
+            this.element.find("#date-end").val(null).focus().addClass("input-selected");
+            this.element.find(".end-selected").removeClass("end-selected").addClass("start-selected");
             end = null;
             switched = false;
           }
 
           if (start) {
-            $(".end-selected").removeClass("end-selected");
+            this.element.find(".end-selected").removeClass("end-selected");
             $(e.target).addClass("end-selected");
           }
           else if (end) {
-            $(".start-selected").removeClass("start-selected");
+            this.element.find(".start-selected").removeClass("start-selected");
             $(e.target).addClass("start-selected");
           }
         }
         //switch
-        $(".date-input").removeClass("input-complete");
+//        this.element.find(".date-input").removeClass("input-complete");
         this.mouseoverRange();
       }
     },
@@ -570,23 +649,23 @@
     mouseout: function () {
       if (compare) {
         if (!startCompare || !endCompare) {
-          $("#datepicker .range-compare").removeClass("range-compare");
+          this.element.find(".range-compare").removeClass("range-compare");
         }
         if (!endCompare) {
-          $(".end-selected-compare").removeClass("end-selected-compare");
+          this.element.find(".end-selected-compare").removeClass("end-selected-compare");
         }
         else if (!startCompare)
-          $(".start-selected-compare").removeClass("start-selected-compare");
+          this.element.find(".start-selected-compare").removeClass("start-selected-compare");
       }
       else {
         if (!start || !end) {
-          $("#datepicker .range").removeClass("range");
+          this.element.find(".range").removeClass("range");
         }
         if (!end) {
-          $(".end-selected").removeClass("end-selected");
+          this.element.find(".end-selected").removeClass("end-selected");
         }
         else if (!start) {
-          $(".start-selected").removeClass("start-selected");
+          this.element.find(".start-selected").removeClass("start-selected");
         }
       }
     },
