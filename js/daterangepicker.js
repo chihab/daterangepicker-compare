@@ -63,6 +63,9 @@
     DRPTemplate += "                <option value=\"month\">";
     DRPTemplate += "                    Month";
     DRPTemplate += "                <\/option>";
+    DRPTemplate += "                <option value=\"monthCur\">";
+    DRPTemplate += "                    Current Month";
+    DRPTemplate += "                <\/option>";
     DRPTemplate += "                <option value=\"year\">";
     DRPTemplate += "                    Year";
     DRPTemplate += "                <\/option>";
@@ -401,12 +404,15 @@
 
     setPeriod: function(event) {
       switch(event.target.value){
-        default:
         case 'day':
           this.setDayPeriod();
           break;
+        default:
         case 'month':
           this.setMonthPeriod();
+          break;
+        case 'monthCur':
+          this.setCurrentMonthPeriod();
           break;
         case 'year':
           this.setYearPeriod();
@@ -419,6 +425,9 @@
           break;
         case 'yearPrev':
           this.setPreviousYearPeriod();
+          break;
+        case 'monthCur':
+          this.setCurrentMonthPeriod();
           break;
       }
     },
@@ -448,6 +457,18 @@
     },
 
     setMonthPeriod: function () {
+      var date = new Date().subDays(1);
+      endDateElt.val(date.format(format));
+      date = date.subDays(30);
+      startDateElt.val(date.format(format));
+      this.notify();
+      this.updatePickerFromInput();
+      startDateInfo.html(startDateElt.val());
+      endDateInfo.html(endDateElt.val());
+      this.container.find('#preselectDateRange').val('month');
+    },
+
+    setCurrentMonthPeriod: function () {
       var date = new Date();
       endDateElt.val(date.format(format));
       date = new Date(date.setDate(1));
