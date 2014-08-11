@@ -28,8 +28,6 @@
     //element that triggered the date range picker
     this.element = $(element);
 
-
-
     //create the picker HTML object
     var DRPTemplate = "";
     DRPTemplate += "<div class=\"bootstrap\">";
@@ -39,9 +37,8 @@
     DRPTemplate += "                <button id=\"datepickerExpand\" class=\"btn btn-default\" type=\"button\">";
     DRPTemplate += "                    <i class=\"fa fa-calendar-empty\"><\/i>";
     DRPTemplate += "							<span class=\"hidden-xs\">";
-    DRPTemplate += "								From";
     DRPTemplate += "                                <strong class=\"text-info\" id=\"datepicker-from-info\"><\/strong>";
-    DRPTemplate += "                                To";
+    DRPTemplate += "                                -";
     DRPTemplate += "                                <strong class=\"text-info\" id=\"datepicker-to-info\"><\/strong>";
     DRPTemplate += "								<strong class=\"text-info\" id=\"datepicker-diff-info\"><\/strong>";
     DRPTemplate += "							<\/span>";
@@ -53,10 +50,10 @@
     DRPTemplate += "                    <div class=\"daterangepicker-days\">";
     DRPTemplate += "                        <div class=\"row\">";
     DRPTemplate += "                            <div class=\"col-sm-6 col-lg-4\">";
-    DRPTemplate += "                                <div class=\"datepicker1\" data-date=\"\" data-date-format=\"Y-mm-dd\"><\/div>";
+    DRPTemplate += "                                <div class=\"datepicker1\" data-date=\"\"><\/div>";
     DRPTemplate += "                            <\/div>";
     DRPTemplate += "                            <div class=\"col-sm-6 col-lg-4\">";
-    DRPTemplate += "                                <div class=\"datepicker2\" data-date=\"\" data-date-format=\"Y-mm-dd\"><\/div>";
+    DRPTemplate += "                                <div class=\"datepicker2\" data-date=\"\"><\/div>";
     DRPTemplate += "                            <\/div>";
     DRPTemplate += "                            <div class=\"col-xs-12 col-sm-6 col-lg-4 pull-right\">";
     DRPTemplate += "            <select id=\"range\">";
@@ -85,13 +82,12 @@
     DRPTemplate += "                                            <span class=\"title\">Date range<\/span>";
     DRPTemplate += "                                        <\/div>";
     DRPTemplate += "                                        <div class='form-date-body'>";
-    DRPTemplate += "                                            <label>From<\/label>";
     DRPTemplate += "                                            <input class='date-input form-control' id='date-start'";
     DRPTemplate += "                                                   placeholder='Start' type='text' name=\"date_from\" value=\"\"";
-    DRPTemplate += "                                                   data-date-format=\"Y-mm-dd\" tabindex=\"1\"\/>";
-    DRPTemplate += "                                            <label>to<\/label>";
+    DRPTemplate += "                                                    tabindex=\"1\"\/>";
+    DRPTemplate += "                                            <span>-<\/span>";
     DRPTemplate += "                                            <input class='date-input form-control' id='date-end' placeholder='End'";
-    DRPTemplate += "                                                   type='text' name=\"date_to\" value=\"\" data-date-format=\"Y-mm-dd\"";
+    DRPTemplate += "                                                   type='text' name=\"date_to\" value=\"\"";
     DRPTemplate += "                                                   tabindex=\"2\"\/>";
     DRPTemplate += "                                        <\/div>";
     DRPTemplate += "                                    <\/div>";
@@ -121,11 +117,11 @@
     DRPTemplate += "                                            <label>From<\/label>";
     DRPTemplate += "                                            <input id=\"date-start-compare\" class=\"date-input form-control\"";
     DRPTemplate += "                                                   type=\"text\" placeholder=\"Start\" name=\"compare_date_from\" value=\"\"";
-    DRPTemplate += "                                                   data-date-format=\"Y-mm-dd\" tabindex=\"4\"\/>";
+    DRPTemplate += "                                                   tabindex=\"4\"\/>";
     DRPTemplate += "                                            <label>to<\/label>";
     DRPTemplate += "                                            <input id=\"date-end-compare\" class=\"date-input form-control\" type=\"text\"";
     DRPTemplate += "                                                   placeholder=\"End\" name=\"compare_date_to\" value=\"\"";
-    DRPTemplate += "                                                   data-date-format=\"Y-mm-dd\"";
+    DRPTemplate += "                                                    ";
     DRPTemplate += "                                                   tabindex=\"5\"\/>";
     DRPTemplate += "                                        <\/div>";
     DRPTemplate += "                                    <\/div>";
@@ -151,8 +147,6 @@
     DRPTemplate += "    <\/div>";
     DRPTemplate += "<\/div>";
 
-
-    //custom options
     if (typeof options !== 'object' || options === null)
       options = {};
 
@@ -169,18 +163,12 @@
 
     this.setOptions(options, cb);
 
-    startDateElt.on('change', $.proxy(this.startDateChange, this));
-    endDateElt.on('change', $.proxy(this.endDateChange, this));
-    startDateCompareElt.on('change', $.proxy(this.startDateCompareChange, this));
-    endDateCompareElt.on('change', $.proxy(this.endDateCompareChange, this));
-    compareElt.on('click', $.proxy(this.compareClick, this));
-
-
     datePickerStart = this.container.find('.datepicker1').calendar({
       "dates": translated_dates,
       "weekStart": 1,
       "start": startDateElt.val(),
-      "end": endDateElt.val()
+      "end": endDateElt.val(),
+      "format": format
     }).on('changeDate', function (ev) {
       if (ev.date.valueOf() >= datePickerEnd.viewDate.valueOf()) {
         datePickerEnd.setValue(ev.date.setMonth(ev.date.getMonth() + 1));
@@ -194,7 +182,8 @@
       "dates": translated_dates,
       "weekStart": 1,
       "start": startDateElt.val(),
-      "end": endDateElt.val()
+      "end": endDateElt.val(),
+      "format": format
     }).on('changeDate', function (ev) {
       if (ev.date.valueOf() <= datePickerStart.viewDate.valueOf()) {
         datePickerStart.setValue(ev.date.setMonth(ev.date.getMonth() - 1));
@@ -205,13 +194,30 @@
       .data('calendar');
 
     //Set first date picker to month -1 if same month
-    var startDate = Date.parseDate(startDateElt.val(), format);
-    var endDate = Date.parseDate(endDateElt.val(), format);
+    var startDate = this.getStart();
+    var endDate = this.getEnd();
 
     if (startDate.getFullYear() == endDate.getFullYear() && startDate.getMonth() == endDate.getMonth())
       datePickerStart.setValue(startDate.subMonths(1));
 
     //Events binding
+    startDateElt.on('change', $.proxy(this.startDateChange, this));
+    endDateElt.on('change', $.proxy(this.endDateChange, this));
+    startDateCompareElt.on('change', $.proxy(this.startDateCompareChange, this));
+    endDateCompareElt.on('change', $.proxy(this.endDateCompareChange, this));
+    compareElt.on('click', $.proxy(this.compareClick, this));
+
+    this.container.find('#range').on('change', $.proxy(this.setPeriod, this));
+    this.container.find('#compare-options').on('change', $.proxy(this.compareOptionsChange, this));
+
+    //TODO Review this.
+    this.container.find('#datepicker-cancel').click(function () {
+      $('#datepicker').addClass('hide');
+    });
+    this.container.find('#datepicker').show(function () {
+      startDateElt.focus();
+    });
+
     startDateElt.focus(function () {
       datePickerStart.setCompare(false);
       datePickerEnd.setCompare(false);
@@ -240,17 +246,6 @@
       $('#compare-options').val(3);
       $(".date-input").removeClass("input-selected");
       $(this).addClass("input-selected");
-    });
-
-    this.container.find('#range').on('change', $.proxy(this.setPeriod, this));
-    this.container.find('#compare-options').on('change', $.proxy(this.compareOptionsChange, this));
-
-    this.container.find('#datepicker-cancel').click(function () {
-      $('#datepicker').addClass('hide');
-    });
-
-    this.container.find('#datepicker').show(function () {
-      startDateElt.focus();
     });
 
     if (compareElt.is(':checked')) {
@@ -547,8 +542,15 @@
       return compareElt.is(':checked');
     },
 
+    setStart: function (date) {
+    },
+    setEnd: function (date) {
+    },
+    setStartCompare: function (date) {
+    },
+    setEndCompare: function (date) {
+    },
     setCompare: function (date) {
-      return compareElt.is(':checked');
     },
 
     setOptions: function (options, callback) {

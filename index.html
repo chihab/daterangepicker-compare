@@ -18,7 +18,7 @@
             monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         };
         $(document).ready(function () {
-            $('#calender').drp({}, function(start, end, cmpStart, cmpEnd){
+            $('#calender').drp({'format': 'dd/mm/Y'}, function(start, end, cmpStart, cmpEnd){
 //                console.log(start, end, cmpStart, cmpEnd);
             });
         });

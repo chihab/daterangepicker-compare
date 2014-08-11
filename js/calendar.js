@@ -19,20 +19,23 @@
 
 //click action
 !function ($) {
-  var click, switched, val, start, end, over, compare, startCompare, endCompare;
+  var click, switched, val, start, end, over, compare, startCompare, endCompare, format;
 
   // Picker object
   var Calendar = function (element, options) {
+
     this.element = $(element);
     compare = false;
 
     if (typeof options.dates !== 'undefined') {
       DPGlobal.dates = options.dates;
     }
+    
+    format = DPGlobal.parseFormat(options.format || 'Y-mm-dd');
 
     if (typeof options.start !== 'undefined') {
       if (options.start.constructor === String && options.start != "") {
-        start = DPGlobal.parseDate(options.start, DPGlobal.parseFormat('Y-mm-dd')).getTime();
+        start = DPGlobal.parseDate(options.start, format).getTime();
       } else if (options.start.constructor === Number) {
         start = options.start;
       } else if (options.start.constructor === Date) {
@@ -42,7 +45,7 @@
 
     if (typeof options.end !== 'undefined') {
       if (options.end.constructor === String && options.start != "") {
-        end = DPGlobal.parseDate(options.end, DPGlobal.parseFormat('Y-mm-dd')).getTime();
+        end = DPGlobal.parseDate(options.end, format).getTime();
       } else if (options.end.constructor === Number) {
         end = options.end;
       } else if (options.end.constructor === Date) {
@@ -54,7 +57,6 @@
       compare = options.compare;
     }
 
-    this.format = DPGlobal.parseFormat(options.format || this.element.data('date-format') || 'Y-mm-dd');
     this.picker = $(DPGlobal.template).appendTo(this.element).show()
       .on({
         click: $.proxy(this.click, this),
@@ -123,7 +125,7 @@
     },
 
     set: function () {
-      var formated = DPGlobal.formatDate(this.date, this.format);
+      var formated = DPGlobal.formatDate(this.date, format);
       this.element.data('date', formated);
     },
 
@@ -134,7 +136,7 @@
 
     setStart: function (date) {
       if (date.constructor === String) {
-        start = DPGlobal.parseDate(date, DPGlobal.parseFormat('Y-mm-dd')).getTime();
+        start = DPGlobal.parseDate(date, format).getTime();
       } else if (date.constructor === Number) {
         start = date;
       } else if (date.constructor === Date) {
@@ -144,7 +146,7 @@
 
     setEnd: function (date) {
       if (date.constructor === String) {
-        end = DPGlobal.parseDate(date, DPGlobal.parseFormat('Y-mm-dd')).getTime();
+        end = DPGlobal.parseDate(date, format).getTime();
       } else if (date.constructor === Number) {
         end = date;
       } else if (date.constructor === Date) {
@@ -157,7 +159,7 @@
         startCompare = date;
       }
       else if (date.constructor === String) {
-        startCompare = DPGlobal.parseDate(date, DPGlobal.parseFormat('Y-mm-dd')).getTime();
+        startCompare = DPGlobal.parseDate(date, format).getTime();
       }
       else if (date.constructor === Number) {
         startCompare = date;
@@ -171,7 +173,7 @@
       if (date === null) {
         endCompare = date;
       } else if (date.constructor === String) {
-        endCompare = DPGlobal.parseDate(date, DPGlobal.parseFormat('Y-mm-dd')).getTime();
+        endCompare = DPGlobal.parseDate(date, format).getTime();
       } else if (date.constructor === Number) {
         endCompare = date;
       } else if (date.constructor === Date) {
@@ -181,7 +183,7 @@
 
     setValue: function (newDate) {
       if (typeof newDate === 'string') {
-        this.date = DPGlobal.parseDate(newDate, this.format);
+        this.date = DPGlobal.parseDate(newDate, format);
       } else {
         this.date = new Date(newDate);
       }
@@ -193,7 +195,7 @@
     update: function (newDate) {
       this.date = DPGlobal.parseDate(
           typeof newDate === 'string' ? newDate : (this.isInput ? this.element.prop('value') : this.element.data('date')),
-        this.format
+        format
       );
       this.viewDate = new Date(this.date.getFullYear(), this.date.getMonth(), 1, 0, 0, 0, 0);
       this.fill();
@@ -379,7 +381,7 @@
                   if (switched)
                     this.element.trigger('pickerChange', ['date-end-compare', endCompare]);
                   startCompare = target.data("val");
-//                  $("#date-start-compare").val(DPGlobal.formatDate(new Date(startCompare), DPGlobal.parseFormat('Y-mm-dd')));
+//                  $("#date-start-compare").val(DPGlobal.formatDate(new Date(startCompare), format));
                   this.element.trigger('pickerChange', ['date-start-compare', startCompare]);
                 } else {
                   this.element.find(".start-selected").removeClass("start-selected");
@@ -387,7 +389,7 @@
                     this.element.trigger('pickerChange', ['date-end', end]);
                   target.addClass("start-selected");
                   start = target.data("val");
-//                  this.picker.find("#date-start").val(DPGlobal.formatDate(new Date(start), DPGlobal.parseFormat('Y-mm-dd')));
+//                  this.picker.find("#date-start").val(DPGlobal.formatDate(new Date(start), format));
                   this.element.trigger('pickerChange', ["date-start", start]);
                 }
 
@@ -419,7 +421,7 @@
                   this.element.find(".end-selected-compare").removeClass("end-selected-compare");
                   target.addClass("end-selected-compare");
                   endCompare = target.data("val");
-//                  $("#date-end-compare").val(DPGlobal.formatDate(new Date(endCompare), DPGlobal.parseFormat('Y-mm-dd')));
+//                  $("#date-end-compare").val(DPGlobal.formatDate(new Date(endCompare), format));
                   this.element.trigger('pickerChange', ['date-end-compare', endCompare]);
                   click = 2;
 //                  this.picker.find("#date-end-compare").removeClass("input-selected").addClass("input-complete");
@@ -427,7 +429,7 @@
                   this.element.find(".end-selected").removeClass("end-selected");
                   target.addClass("end-selected");
                   end = target.data("val");
-//                  $("#date-end").val(DPGlobal.formatDate(new Date(end), DPGlobal.parseFormat('Y-mm-dd')));
+//                  $("#date-end").val(DPGlobal.formatDate(new Date(end), format));
                   click = 2;
 //                  $("#date-end").removeClass("input-selected").addClass("input-complete");
                   this.element.trigger('pickerChange', ['date-end', end]);
@@ -585,7 +587,7 @@
 
           if (startCompare && over < startCompare) {
             endCompare = startCompare;
-//            $("#date-end-compare").val(DPGlobal.formatDate(new Date(startCompare), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
+//            $("#date-end-compare").val(DPGlobal.formatDate(new Date(startCompare), format)).removeClass("input-selected");
 //            $("#date-start-compare").val(null).focus().addClass("input-selected");
             this.element.find(".start-selected-compare").removeClass("start-selected-compare").addClass("end-selected-compare");
             startCompare = null;
@@ -593,7 +595,7 @@
           }
           else if (endCompare && over > endCompare) {
             startCompare = endCompare;
-//            $("#date-start-compare").val(DPGlobal.formatDate(new Date(endCompare), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
+//            $("#date-start-compare").val(DPGlobal.formatDate(new Date(endCompare), format)).removeClass("input-selected");
 //            $("#date-end-compare").val(null).focus().addClass("input-selected");
             this.element.find(".end-selected-compare").removeClass("end-selected-compare").addClass("start-selected-compare");
             endCompare = null;
@@ -614,7 +616,7 @@
 
           if (start && over < start) {
             end = start;
-//            $("#date-end").val(DPGlobal.formatDate(new Date(start), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
+//            $("#date-end").val(DPGlobal.formatDate(new Date(start), format)).removeClass("input-selected");
 //            $('#date-end').trigger('pickerChange');
 //            $("#date-start").val(null).focus().addClass("input-selected");
             this.element.find(".start-selected").removeClass("start-selected").addClass("end-selected");
@@ -623,7 +625,7 @@
           }
           else if (end && over > end) {
             start = end;
-//            this.picker.find("#date-start").val(DPGlobal.formatDate(new Date(end), DPGlobal.parseFormat('Y-mm-dd'))).removeClass("input-selected");
+//            this.picker.find("#date-start").val(DPGlobal.formatDate(new Date(end), format)).removeClass("input-selected");
 //            $('#date-start').trigger('pickerChange');
             this.element.find("#date-end").val(null).focus().addClass("input-selected");
             this.element.find(".end-selected").removeClass("end-selected").addClass("start-selected");
