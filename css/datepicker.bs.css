@@ -1,0 +1,338 @@
+.bootstrap #datepicker .input-selected {
+    margin: 0
+}
+
+.bootstrap #datepicker #date-start.input-selected, .bootstrap #datepicker #date-end.input-selected {
+    border: solid 3px #00a4e7
+}
+
+.bootstrap #datepicker #date-start-compare.input-selected, .bootstrap #datepicker #date-end-compare.input-selected {
+    border: solid 3px #ff8000
+}
+
+.bootstrap #datepicker div#datepicker-form #date-range {
+    border: solid 1px #0092ce
+}
+
+.bootstrap #datepicker div#datepicker-form #date-range .form-date-heading {
+    background-color: #0092ce
+}
+
+.bootstrap #datepicker div#datepicker-form #date-compare {
+    border: solid 1px #e67300
+}
+
+.bootstrap #datepicker div#datepicker-form #date-compare .form-date-heading {
+    background-color: #e67300
+}
+
+.bootstrap #datepicker div#datepicker-form .form-date-heading {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 0 0 8px
+}
+
+.bootstrap #datepicker div#datepicker-form .form-date-heading .title, .bootstrap #datepicker div#datepicker-form .form-date-heading .checkbox-title label {
+    /*font-size: 1.15em;*/
+    color: #fff;
+    font-weight: 200;
+    text-transform: uppercase;
+    line-height: 2em
+}
+
+.bootstrap #datepicker div#datepicker-form .form-date-heading .btn-default {
+    background-color: rgba(255, 255, 255, 0.3);
+    font-weight: 700;
+    color: #fff;
+    border: none
+}
+
+.bootstrap #datepicker div#datepicker-form .form-date-heading select {
+    margin: 2px 2px 0 0
+}
+
+.bootstrap #datepicker div#datepicker-form .form-date-body, .bootstrap #datepicker div#datepicker-form .form-date-actions {
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
+    display: inline-block
+}
+
+.bootstrap #datepicker div#datepicker-form .form-date-actions {
+    border: solid 1px #ccc
+}
+
+.bootstrap #datepicker div#datepicker-form .form-date-group {
+    clear: both;
+    width: 100%;
+    margin: 0 auto 6px
+}
+
+.bootstrap #datepicker div#datepicker-form .form-date-group label {
+    /*font-size: 0.8em;*/
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #666
+}
+
+.bootstrap #datepicker div#datepicker-form .form-date-group input {
+    margin: 4px 4px 0 0
+}
+
+.bootstrap #datepicker div#datepicker-form .form-date-group input[type='text'] {
+    width: 35%
+}
+
+.bootstrap #datepicker div#datepicker-form .form-date-group button {
+    margin: 5px 0 0 0
+}
+
+.bootstrap #datepicker .calendar {
+    position: relative;
+    width: 100%;
+    font-size: 13px;
+    border: solid 1px #ccc;
+    margin: 0 0 8px 0
+}
+
+.bootstrap #datepicker .calendar table {
+    width: 100%;
+    margin: 0;
+    border-spacing: 1px
+}
+
+.bootstrap #datepicker .calendar thead tr th {
+    background-color: #0092ce;
+    color: #fff;
+    /*font-size: 0.7em;*/
+    height: 1.5em;
+    text-transform: uppercase
+}
+
+.bootstrap #datepicker .calendar thead tr:first-child th {
+    background-color: #fff;
+    border-bottom: 1px solid #0092ce;
+    font-weight: 200;
+    /*font-size: 1.4em;*/
+    color: #00a4e7
+}
+
+.bootstrap #datepicker .calendar td, .bootstrap #datepicker .calendar th {
+    text-align: center;
+    padding: 0;
+    position: relative
+}
+
+.bootstrap #datepicker .calendar tr {
+    border-bottom: solid 1px #fff
+}
+
+.bootstrap #datepicker .calendar td {
+    color: #00a4e7;
+    height: 2.4em;
+    padding: 0 8px;
+    -webkit-transition-property: all;
+    transition-property: all;
+    -webkit-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out
+}
+
+.bootstrap #datepicker .calendar td.day:after {
+    content: "";
+    position: absolute;
+    display: block;
+    top: 0;
+    width: 100%;
+    z-index: 0;
+    background-color: transparent;
+    left: 0
+}
+
+.bootstrap #datepicker .calendar td.day:hover {
+    cursor: pointer
+}
+
+.bootstrap #datepicker .calendar td.day.disabled {
+    color: #ccc
+}
+
+.bootstrap #datepicker .calendar td.old, .bootstrap #datepicker .calendar td.new {
+    color: #ccc
+}
+
+.bootstrap #datepicker .calendar td.start-selected:not(.old):not(.new):not(.end-selected) {
+    color: #fff;
+    font-weight: 700;
+    background-color: #00a4e7;
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px
+}
+
+.bootstrap #datepicker .calendar td.start-selected:not(.old):not(.new):not(.end-selected).range-compare {
+    background-color: #4ca0b1;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0
+}
+
+.bootstrap #datepicker .calendar td.start-selected:not(.old):not(.new):not(.end-selected).end-selected-compare, .bootstrap #datepicker .calendar td.start-selected:not(.old):not(.new):not(.end-selected).start-selected-compare {
+    background-color: #4c99a1
+}
+
+.bootstrap #datepicker .calendar td.start-selected:not(.old):not(.new):not(.end-selected).end-selected-compare {
+    -webkit-border-radius: 0;
+    border-radius: 0
+}
+
+.bootstrap #datepicker .calendar td.end-selected:not(.old):not(.new):not(.start-selected) {
+    color: #fff;
+    font-weight: 700;
+    background-color: #00a4e7;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px
+}
+
+.bootstrap #datepicker .calendar td.end-selected:not(.old):not(.new):not(.start-selected).range-compare {
+    background-color: #4ca0b1;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0
+}
+
+.bootstrap #datepicker .calendar td.end-selected:not(.old):not(.new):not(.start-selected).end-selected-compare, .bootstrap #datepicker .calendar td.end-selected:not(.old):not(.new):not(.start-selected).start-selected-compare {
+    background-color: #4c99a1
+}
+
+.bootstrap #datepicker .calendar td.end-selected:not(.old):not(.new):not(.start-selected).start-selected-compare {
+    -webkit-border-radius: 0;
+    border-radius: 0
+}
+
+.bootstrap #datepicker .calendar td.start-selected-compare:not(.old):not(.new):not(.end-selected-compare) {
+    color: #fff;
+    font-weight: 700;
+    background-color: #ff8000;
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px
+}
+
+.bootstrap #datepicker .calendar td.start-selected-compare:not(.old):not(.new):not(.end-selected-compare).range {
+    background-color: #ba924c;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0
+}
+
+.bootstrap #datepicker .calendar td.end-selected-compare:not(.old):not(.new):not(.start-selected-compare) {
+    color: #fff;
+    font-weight: 700;
+    background-color: #ff8000;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px
+}
+
+.bootstrap #datepicker .calendar td.end-selected-compare:not(.old):not(.new):not(.start-selected-compare).range {
+    background-color: #ba924c;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0
+}
+
+.bootstrap #datepicker .calendar td.end-selected.start-selected {
+    color: #fff;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+    font-weight: 700;
+    background-color: #00a4e7
+}
+
+.bootstrap #datepicker .calendar td.end-selected.start-selected.range-compare {
+    background-color: #4ca0b1;
+    -webkit-border-radius: 0;
+    border-radius: 0
+}
+
+.bootstrap #datepicker .calendar td.end-selected-compare.start-selected-compare {
+    color: #fff;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+    font-weight: 700;
+    background-color: #ff8000
+}
+
+.bootstrap #datepicker .calendar td.end-selected-compare.start-selected-compare.range {
+    background-color: #ba924c;
+    -webkit-border-radius: 0;
+    border-radius: 0
+}
+
+.bootstrap #datepicker .calendar td.range {
+    color: #cef1ff;
+    background-color: #1bbdff
+}
+
+.bootstrap #datepicker .calendar td.range.range-compare {
+    background-color: #8dab99
+}
+
+.bootstrap #datepicker .calendar td.range-compare {
+    color: #fff2e5;
+    background-color: #f93
+}
+
+.bootstrap #datepicker .calendar td.range-compare.range {
+    background-color: #8dab99
+}
+
+.bootstrap #datepicker .calendar td.today {
+    background-color: #fff
+}
+
+.bootstrap #datepicker .calendar td span {
+    padding: 0;
+    display: block;
+    width: 33.333%;
+    height: 3em;
+    line-height: 3em;
+    font-weight: 400;
+    float: left;
+    text-transform: uppercase;
+    cursor: pointer
+}
+
+.bootstrap #datepicker .calendar td span:hover {
+    color: #fff;
+    background-color: #00a4e7
+}
+
+.bootstrap #datepicker .calendar td span.active {
+    background-color: #00a4e7;
+    color: #fff
+}
+
+.bootstrap #datepicker .calendar td span.old {
+    color: #ccc
+}
+
+.bootstrap #datepicker .calendar th.next {
+    text-align: right;
+    padding: 0 10px 0 0
+}
+
+.bootstrap #datepicker .calendar th.prev {
+    text-align: left;
+    padding: 0 0 0 10px
+}
+
+.bootstrap #datepicker .calendar th.next, .bootstrap #datepicker .calendar th.prev, .bootstrap #datepicker .calendar th.month-switch {
+    /*font-size: 1.3em;*/
+    line-height: 2em;
+    height: 2em
+}
+
+.bootstrap #datepicker .calendar th.next:hover, .bootstrap #datepicker .calendar th.prev:hover, .bootstrap #datepicker .calendar th.month-switch:hover {
+    background-color: #0092ce;
+    color: #fff
+}
+
+.bootstrap #datepicker .calendar thead tr:first-child th {
+    cursor: pointer
+}
