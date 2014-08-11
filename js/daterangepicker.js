@@ -16,6 +16,7 @@
 }(this, function (root, drp, $) {
   var datePickerStart = null, datePickerEnd = null;
   var startDateElt = null, endDateElt = null, startDateCompareElt = null, endDateCompareElt = null;
+  var startDateInfo = null, endDateInfo = null;
   var compareElt = null;
   var format = null;
 
@@ -27,31 +28,13 @@
     //element that triggered the date range picker
     this.element = $(element);
 
+
+
     //create the picker HTML object
     var DRPTemplate = "";
     DRPTemplate += "<div class=\"bootstrap\">";
     DRPTemplate += "    <div id=\"calendar\" class=\"panel\">";
     DRPTemplate += "        <form action=\"\" method=\"post\" id=\"calendar_form\" name=\"calendar_form\" class=\"form-inline\">";
-    DRPTemplate += "            <div class=\"btn-group\">";
-    DRPTemplate += "                <button type=\"button\" name=\"submitDateDay\" class=\"btn btn-default submitDateDay\">";
-    DRPTemplate += "                    Day";
-    DRPTemplate += "                <\/button>";
-    DRPTemplate += "                <button type=\"button\" name=\"submitDateMonth\" class=\"btn btn-default submitDateMonth\">";
-    DRPTemplate += "                    Month";
-    DRPTemplate += "                <\/button>";
-    DRPTemplate += "                <button type=\"button\" name=\"submitDateYear\" class=\"btn btn-default submitDateYear\">";
-    DRPTemplate += "                    Year";
-    DRPTemplate += "                <\/button>";
-    DRPTemplate += "                <button type=\"button\" name=\"submitDateDayPrev\" class=\"btn btn-default submitDateDayPrev\">";
-    DRPTemplate += "                    Day-1";
-    DRPTemplate += "                <\/button>";
-    DRPTemplate += "                <button type=\"button\" name=\"submitDateMonthPrev\" class=\"btn btn-default submitDateMonthPrev\">";
-    DRPTemplate += "                    Month-1";
-    DRPTemplate += "                <\/button>";
-    DRPTemplate += "                <button type=\"button\" name=\"submitDateYearPrev\" class=\"btn btn-default submitDateYearPrev\">";
-    DRPTemplate += "                    Year-1";
-    DRPTemplate += "                <\/button>";
-    DRPTemplate += "            <\/div>";
     DRPTemplate += "            <div class=\"form-group pull-right\">";
     DRPTemplate += "                <button id=\"datepickerExpand\" class=\"btn btn-default\" type=\"button\">";
     DRPTemplate += "                    <i class=\"fa fa-calendar-empty\"><\/i>";
@@ -65,7 +48,7 @@
     DRPTemplate += "                    <i class=\"fa fa-caret-down\"><\/i>";
     DRPTemplate += "                <\/button>";
     DRPTemplate += "            <\/div>";
-    DRPTemplate += "            <div id=\"datepicker\" class=\"row row-padding-top hide\">";
+    DRPTemplate += "            <div id=\"datepicker\" class=\"row row-padding-top\">";
     DRPTemplate += "                <div class=\"col-lg-12\">";
     DRPTemplate += "                    <div class=\"daterangepicker-days\">";
     DRPTemplate += "                        <div class=\"row\">";
@@ -76,6 +59,26 @@
     DRPTemplate += "                                <div class=\"datepicker2\" data-date=\"\" data-date-format=\"Y-mm-dd\"><\/div>";
     DRPTemplate += "                            <\/div>";
     DRPTemplate += "                            <div class=\"col-xs-12 col-sm-6 col-lg-4 pull-right\">";
+    DRPTemplate += "            <select id=\"range\">";
+    DRPTemplate += "                <option value=\"day\">";
+    DRPTemplate += "                    Day";
+    DRPTemplate += "                <\/option>";
+    DRPTemplate += "                <option value=\"month\">";
+    DRPTemplate += "                    Month";
+    DRPTemplate += "                <\/option>";
+    DRPTemplate += "                <option value=\"year\">";
+    DRPTemplate += "                    Year";
+    DRPTemplate += "                <\/option>";
+    DRPTemplate += "                <option value=\"dayPrev\">";
+    DRPTemplate += "                    Day-1";
+    DRPTemplate += "                <\/option>";
+    DRPTemplate += "                <option value=\"monthPrev\">";
+    DRPTemplate += "                    Month-1";
+    DRPTemplate += "                <\/option>";
+    DRPTemplate += "                <option value=\"yearPrev\">";
+    DRPTemplate += "                    Year-1";
+    DRPTemplate += "                <\/option>";
+    DRPTemplate += "            <\/select>";
     DRPTemplate += "                                <div id='datepicker-form' class='form-inline'>";
     DRPTemplate += "                                    <div id='date-range' class='form-date-group'>";
     DRPTemplate += "                                        <div class='form-date-heading'>";
@@ -161,6 +164,8 @@
     startDateCompareElt = this.container.find('#date-start-compare');
     endDateCompareElt = this.container.find('#date-end-compare');
     compareElt = this.container.find('#datepicker-compare');
+    startDateInfo = this.container.find('#datepicker-from-info');
+    endDateInfo = this.container.find('#datepicker-to-info');
 
     this.setOptions(options, cb);
 
@@ -237,13 +242,7 @@
       $(this).addClass("input-selected");
     });
 
-
-    this.container.find('.submitDateDay').on('click', $.proxy(this.setDayPeriod, this));
-    this.container.find('.submitDateMonth').on('click', $.proxy(this.setMonthPeriod, this));
-    this.container.find('.submitDateYear').on('click', $.proxy(this.setYearPeriod, this));
-    this.container.find('.submitDateDayPrev').on('click', $.proxy(this.setPreviousDayPeriod, this));
-    this.container.find('.submitDateMonthPrev').on('click', $.proxy(this.setPreviousMonthPeriod, this));
-    this.container.find('.submitDateYearPrev').on('click', $.proxy(this.setPreviousYearPeriod, this));
+    this.container.find('#range').on('change', $.proxy(this.setPeriod, this));
     this.container.find('#compare-options').on('change', $.proxy(this.compareOptionsChange, this));
 
     this.container.find('#datepicker-cancel').click(function () {
@@ -405,15 +404,39 @@
       this.updateCompareRange();
     },
 
+    setPeriod: function(event) {
+      switch(event.target.value){
+        default:
+        case 'day':
+          this.setDayPeriod();
+          break;
+        case 'month':
+          this.setMonthPeriod();
+          break;
+        case 'year':
+          this.setYearPeriod();
+          break;
+        case 'dayPrev':
+          this.setPreviousDayPeriod();
+          break;
+        case 'monthPrev':
+          this.setPreviousMonthPeriod();
+          break;
+        case 'yearPrev':
+          this.setPreviousYearPeriod();
+          break;
+      }
+    },
+
     setDayPeriod: function () {
       var date = new Date();
       startDateElt.val(date.format(format));
       endDateElt.val(date.format(format));
 
       this.updatePickerFromInput();
-      $('#datepicker-from-info').html(startDateElt.val());
-      $('#datepicker-to-info').html(endDateElt.val());
-      $('#preselectDateRange').val('day');
+      startDateInfo.html(startDateElt.val());
+      endDateInfo.html(endDateElt.val());
+      this.container.find('#preselectDateRange').val('day');
       this.notify();
     },
 
@@ -424,9 +447,9 @@
       endDateElt.val(date.format(format));
       this.notify();
       this.updatePickerFromInput();
-      $('#datepicker-from-info').html(startDateElt.val());
-      $('#datepicker-to-info').html(endDateElt.val());
-      $('#preselectDateRange').val('prev-day');
+      startDateInfo.html(startDateElt.val());
+      endDateInfo.html(endDateElt.val());
+      this.container.find('#preselectDateRange').val('prev-day');
     },
 
     setMonthPeriod: function () {
@@ -436,9 +459,9 @@
       startDateElt.val(date.format(format));
       this.notify();
       this.updatePickerFromInput();
-      $('#datepicker-from-info').html(startDateElt.val());
-      $('#datepicker-to-info').html(endDateElt.val());
-      $('#preselectDateRange').val('month');
+      startDateInfo.html(startDateElt.val());
+      endDateInfo.html(endDateElt.val());
+      this.container.find('#preselectDateRange').val('month');
     },
 
     setPreviousMonthPeriod: function () {
@@ -449,9 +472,9 @@
       startDateElt.val(date.format(format));
       this.notify();
       this.updatePickerFromInput();
-      $('#datepicker-from-info').html(startDateElt.val());
-      $('#datepicker-to-info').html(endDateElt.val());
-      $('#preselectDateRange').val('prev-month');
+      startDateInfo.html(startDateElt.val());
+      endDateInfo.html(endDateElt.val());
+      this.container.find('#preselectDateRange').val('prev-month');
     },
 
     setYearPeriod: function () {
@@ -461,9 +484,9 @@
       startDateElt.val(date.format(format));
       this.notify();
       this.updatePickerFromInput();
-      $('#datepicker-from-info').html(startDateElt.val());
-      $('#datepicker-to-info').html(endDateElt.val());
-      $('#preselectDateRange').val('year');
+      startDateInfo.html(startDateElt.val());
+      endDateInfo.html(endDateElt.val());
+      this.container.find('#preselectDateRange').val('year');
     },
 
     setPreviousYearPeriod: function () {
@@ -475,9 +498,9 @@
       startDateElt.val(date.format(format));
       this.notify();
       this.updatePickerFromInput();
-      $('#datepicker-from-info').html(startDateElt.val());
-      $('#datepicker-to-info').html(endDateElt.val());
-      $('#preselectDateRange').val('prev-year');
+      startDateInfo.html(startDateElt.val());
+      endDateInfo.html(endDateElt.val());
+      this.container.find('#preselectDateRange').val('prev-year');
     },
 
     setPreviousPeriod: function () {
@@ -521,6 +544,10 @@
     },
 
     getCompare: function () {
+      return compareElt.is(':checked');
+    },
+
+    setCompare: function (date) {
       return compareElt.is(':checked');
     },
 
