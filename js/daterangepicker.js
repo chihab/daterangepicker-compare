@@ -395,7 +395,7 @@
       datePickerStart.setStart(startDateElt.val());
       datePickerStart.setEnd(endDateElt.val());
       datePickerEnd.setStart(startDateElt.val());
-      datePickerEnd.setValue(Date.parseDate(endDateElt.val()).setDate(1));
+      datePickerEnd.setValue(Date.parseDate(endDateElt.val(), format).setDate(1));
       datePickerStart.setValue(datePickerStart.date.setFullYear(datePickerEnd.date.getFullYear(), datePickerEnd.date.getMonth() - 1, 1));
       datePickerStart.updateRange();
       datePickerEnd.updateRange();
