@@ -208,7 +208,7 @@
         html += '<th class="dow">' + DPGlobal.dates.daysMin[(dowCnt++) % 7] + '</th>';
       }
       html += '</tr>';
-      this.picker.find('.daterangepicker-days thead').append(html);
+      this.picker.find('.datepicker-days table thead').append(html);
     },
 
     fillMonths: function () {
@@ -217,14 +217,14 @@
       while (i < 12) {
         html += '<span class="month">' + DPGlobal.dates.monthsShort[i++] + '</span>';
       }
-      this.picker.find('.daterangepicker-months td').append(html);
+      this.picker.find('.datepicker-months td').append(html);
     },
 
     fill: function () {
       var d = new Date(this.viewDate),
         year = d.getFullYear(),
         month = d.getMonth();
-      this.picker.find('.daterangepicker-days th:eq(1)')
+      this.picker.find('.datepicker-days th:eq(1)')
         .text(year + ' / ' + DPGlobal.dates.months[month]).append('&nbsp;<small><i class="fa fa-angle-down"></i><small>');
       var prevMonth = new Date(year, month - 1, 28, 0, 0, 0, 0),
         day = DPGlobal.getDaysInMonth(prevMonth.getFullYear(), prevMonth.getMonth());
@@ -258,10 +258,10 @@
         }
         prevMonth.setDate(prevMonth.getDate() + 1);
       }
-      this.picker.find('.daterangepicker-days tbody').empty().append(html.join(''));
+      this.picker.find('.datepicker-days tbody').empty().append(html.join(''));
       var currentYear = this.date.getFullYear();
 
-      var months = this.picker.find('.daterangepicker-months')
+      var months = this.picker.find('.datepicker-months')
         .find('th:eq(1)')
         .text(year)
         .end()
@@ -272,7 +272,7 @@
 
       html = '';
       year = parseInt(year / 10, 10) * 10;
-      var yearCont = this.picker.find('.daterangepicker-years')
+      var yearCont = this.picker.find('.datepicker-years')
         .find('th:eq(1)')
         .text(year + '-' + (year + 9))
         .end()
@@ -295,7 +295,7 @@
         switch (target[0].nodeName.toLowerCase()) {
           case 'th':
             switch (target[0].className) {
-              case 'month-switch':
+              case 'month':
                 this.showMode(1);
                 break;
               case 'prev':
@@ -681,7 +681,7 @@
       if (dir)
         this.viewMode = Math.max(this.minViewMode, Math.min(2, this.viewMode + dir));
 
-      this.picker.find('>div').hide().filter('.daterangepicker-' + DPGlobal.modes[this.viewMode].clsName).show();
+      this.picker.find('>div').hide().filter('.datepicker-' + DPGlobal.modes[this.viewMode].clsName).show();
     }
   };
 
@@ -803,32 +803,33 @@
     },
     headTemplate: '<thead>' +
       '<tr>' +
-      '<th class="prev"><i class="fa fa-angle-left"></i></th>' +
-      '<th colspan="5" class="month-switch"></th>' +
-      '<th class="next"><i class="fa fa-angle-right"</th>' +
+      '<th class="prev"><i class="fa fa-arrow-left icon-arrow-left glyphicon glyphicon-arrow-left"></i></th>' +
+      '<th colspan="5" class="month"></th>' +
+      '<th class="next"><i class="fa fa-arrow-right icon-arrow-right glyphicon glyphicon-arrow-right"</th>' +
       '</tr>' +
       '</thead>',
     contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>'
   };
-  DPGlobal.template = '<div class="calendar">' +
-    '<div class="daterangepicker-days">' +
-    '<table class=" table-condensed">' +
-    DPGlobal.headTemplate +
-    '<tbody></tbody>' +
-    '</table>' +
-    '</div>' +
-    '<div class="daterangepicker-months">' +
-    '<table class="table-condensed">' +
-    DPGlobal.headTemplate +
-    DPGlobal.contTemplate +
-    '</table>' +
-    '</div>' +
-    '<div class="daterangepicker-years">' +
-    '<table class="table-condensed">' +
-    DPGlobal.headTemplate +
-    DPGlobal.contTemplate +
-    '</table>' +
-    '</div>' +
-    '</div>';
+
+  DPGlobal.template = '<div class="calendar-date">' +
+                        '<div class="datepicker-days">' +
+                          '<table class="table-condensed">' +
+                            DPGlobal.headTemplate +
+                            '<tbody></tbody>' +
+                          '</table>' +
+                        '</div>' +
+                        '<div class="datepicker-months">' +
+                          '<table class="table-condensed">' +
+                            DPGlobal.headTemplate +
+                            DPGlobal.contTemplate +
+                          '</table>' +
+                        '</div>' +
+                        '<div class="datepicker-years">' +
+                          '<table class="table-condensed">' +
+                            DPGlobal.headTemplate +
+                            DPGlobal.contTemplate +
+                          '</table>' +
+                        '</div>' +
+                      '</div>';
 
 }(window.jQuery);

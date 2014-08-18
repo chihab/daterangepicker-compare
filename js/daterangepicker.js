@@ -29,80 +29,49 @@
     this.element = $(element);
 
     //create the picker HTML object
-    var DRPTemplate = "";
-    DRPTemplate += "<div class=\"bootstrap\">";
-    DRPTemplate += "    <div id=\"calendar\" class=\"panel\">";
-    DRPTemplate += "        <form action=\"\" method=\"post\" id=\"calendar_form\" name=\"calendar_form\" class=\"form-inline\">";
-    DRPTemplate += "            <div class=\"form-group pull-right\">";
-    DRPTemplate += "                <button id=\"datepickerExpand\" class=\"btn btn-default\" type=\"button\">";
-    DRPTemplate += "                    <i class=\"fa fa-calendar-empty\"><\/i>";
-    DRPTemplate += "							<span class=\"hidden-xs\">";
-    DRPTemplate += "                                <strong class=\"text-info\" id=\"datepicker-from-info\"><\/strong>";
-    DRPTemplate += "                                -";
-    DRPTemplate += "                                <strong class=\"text-info\" id=\"datepicker-to-info\"><\/strong>";
-    DRPTemplate += "								<strong class=\"text-info\" id=\"datepicker-diff-info\"><\/strong>";
-    DRPTemplate += "							<\/span>";
-    DRPTemplate += "                    <i class=\"fa fa-caret-down\"><\/i>";
-    DRPTemplate += "                <\/button>";
-    DRPTemplate += "            <\/div>";
-    DRPTemplate += "            <div id=\"datepicker\" class=\"row row-padding-top\">";
-    DRPTemplate += "                <div class=\"col-lg-12\">";
-    DRPTemplate += "                    <div class=\"daterangepicker-days\">";
-    DRPTemplate += "                        <div class=\"row\">";
-    DRPTemplate += "                            <div class=\"col-sm-6 col-lg-4\">";
-    DRPTemplate += "                                <div class=\"datepicker1\" data-date=\"\"><\/div>";
-    DRPTemplate += "                            <\/div>";
-    DRPTemplate += "                            <div class=\"col-sm-6 col-lg-4\">";
-    DRPTemplate += "                                <div class=\"datepicker2\" data-date=\"\"><\/div>";
-    DRPTemplate += "                            <\/div>";
-    DRPTemplate += "                            <div class=\"col-xs-12 col-sm-6 col-lg-4 pull-right\">";
-    DRPTemplate += "            <select id=\"range\">";
-    DRPTemplate += "                <option value=\"day\">";
-    DRPTemplate += "                    Day";
-    DRPTemplate += "                <\/option>";
-    DRPTemplate += "                <option value=\"month\">";
-    DRPTemplate += "                    Month";
-    DRPTemplate += "                <\/option>";
-    DRPTemplate += "                <option value=\"monthCur\">";
-    DRPTemplate += "                    Current Month";
-    DRPTemplate += "                <\/option>";
-    DRPTemplate += "                <option value=\"year\">";
-    DRPTemplate += "                    Year";
-    DRPTemplate += "                <\/option>";
-    DRPTemplate += "                <option value=\"dayPrev\">";
-    DRPTemplate += "                    Day-1";
-    DRPTemplate += "                <\/option>";
-    DRPTemplate += "                <option value=\"monthPrev\">";
-    DRPTemplate += "                    Month-1";
-    DRPTemplate += "                <\/option>";
-    DRPTemplate += "                <option value=\"yearPrev\">";
-    DRPTemplate += "                    Year-1";
-    DRPTemplate += "                <\/option>";
-    DRPTemplate += "            <\/select>";
-    DRPTemplate += "                                <div id='datepicker-form' class='form-inline'>";
-    DRPTemplate += "                                    <div id='date-range' class='form-date-group'>";
-    DRPTemplate += "                                        <div class='form-date-heading'>";
-    DRPTemplate += "                                            <span class=\"title\">Date range<\/span>";
-    DRPTemplate += "                                        <\/div>";
-    DRPTemplate += "                                        <div class='form-date-body'>";
-    DRPTemplate += "                                            <input class='date-input form-control' id='date-start'";
-    DRPTemplate += "                                                   placeholder='Start' type='text' name=\"date_from\" value=\"\"";
-    DRPTemplate += "                                                    tabindex=\"1\"\/>";
-    DRPTemplate += "                                            <span>-<\/span>";
-    DRPTemplate += "                                            <input class='date-input form-control' id='date-end' placeholder='End'";
-    DRPTemplate += "                                                   type='text' name=\"date_to\" value=\"\"";
-    DRPTemplate += "                                                   tabindex=\"2\"\/>";
-    DRPTemplate += "                                        <\/div>";
-    DRPTemplate += "                                    <\/div>";
-    DRPTemplate += "                                    <div id=\"date-compare\" class='form-date-group'>";
-    DRPTemplate += "                                        <div class='form-date-heading'>";
-    DRPTemplate += "                                                <span class=\"checkbox-title\">";
-    DRPTemplate += "                                                    <label>";
+    //create the picker HTML object
+    var DRPTemplate = '<div class="datepicker dropdown-menu opensleft show-calendar" style="left: auto; display: block;">' +
+                        '<div id="datepicker1" class="calendar left" data-date=""></div>' +
+                        '<div id="datepicker2" class="calendar right" data-date=""></div>' +
+                        '<div class="ranges">' ;
+    DRPTemplate += "                            <select id=\"range\" class=\"form-control fixed-width-lg pull-right\">";
+    DRPTemplate += "                               <option value=\"day\">";
+    DRPTemplate += "                                Day";
+    DRPTemplate += "                               <\/option>";
+    DRPTemplate += "                               <option value=\"month\">";
+    DRPTemplate += "                                   Month";
+    DRPTemplate += "                               <\/option>";
+    DRPTemplate += "                               <option value=\"monthCur\">";
+    DRPTemplate += "                                   Current Month";
+    DRPTemplate += "                               <\/option>";
+    DRPTemplate += "                               <option value=\"year\">";
+    DRPTemplate += "                                   Year";
+    DRPTemplate += "                               <\/option>";
+    DRPTemplate += "                               <option value=\"dayPrev\">";
+    DRPTemplate += "                                   Day-1";
+    DRPTemplate += "                               <\/option>";
+    DRPTemplate += "                               <option value=\"monthPrev\">";
+    DRPTemplate += "                                   Month-1";
+    DRPTemplate += "                               <\/option>";
+    DRPTemplate += "                               <option value=\"yearPrev\">";
+    DRPTemplate += "                                   Year-1";
+    DRPTemplate += "                               <\/option>";
+    DRPTemplate += "                             <\/select>";
+    DRPTemplate +=          '<div class="range_inputs">' +
+                            '<div class="datepicker_start_input">' +
+                              '<label for="datepicker_start">From</label>' +
+                              '<input class="date-input input-mini" type="text" id="date-start" name="datepicker_start" />' +
+                            '</div>' +
+                            '<div class="datepicker_end_input">' +
+                              '<label for="datepicker_end">To</label>' +
+                              '<input class="date-input input-mini" type="text" id="date-end" name="datepicker_end" />' +
+                            '</div>';
+    DRPTemplate += '                                                    <div class="datepicker_compare">' +
+                                                                          '<label for="datepicker-compare">';
     DRPTemplate += "                                                        <input type='checkbox' id=\"datepicker-compare\"";
-    DRPTemplate += "                                                               name=\"datepicker_compare\" tabindex=\"3\">";
+    DRPTemplate += "                                                               name=\"datepicker_compare\" tabindex=\"3\" />";
     DRPTemplate += "                                                        Compare to";
-    DRPTemplate += "                                                    <\/label>";
-    DRPTemplate += "                                                <\/span>";
+    DRPTemplate += "                                                      <\/label>";
     DRPTemplate += "                                            <select id=\"compare-options\"";
     DRPTemplate += "                                                    class=\"form-control fixed-width-lg pull-right\"";
     DRPTemplate += "                                                    name=\"compare_date_option\">";
@@ -114,47 +83,147 @@
     DRPTemplate += "                                                <\/option>";
     DRPTemplate += "                                                <option value=\"3\" label=\"Custom\">Custom<\/option>";
     DRPTemplate += "                                            <\/select>";
-    DRPTemplate += "                                        <\/div>";
-    DRPTemplate += "                                        <div class=\"form-date-body\" id=\"form-date-body-compare\"";
-    DRPTemplate += "                                             style=\"display: none;\">";
-    DRPTemplate += "                                            <label>From<\/label>";
-    DRPTemplate += "                                            <input id=\"date-start-compare\" class=\"date-input form-control\"";
-    DRPTemplate += "                                                   type=\"text\" placeholder=\"Start\" name=\"compare_date_from\" value=\"\"";
-    DRPTemplate += "                                                   tabindex=\"4\"\/>";
-    DRPTemplate += "                                            <label>to<\/label>";
-    DRPTemplate += "                                            <input id=\"date-end-compare\" class=\"date-input form-control\" type=\"text\"";
-    DRPTemplate += "                                                   placeholder=\"End\" name=\"compare_date_to\" value=\"\"";
-    DRPTemplate += "                                                    ";
-    DRPTemplate += "                                                   tabindex=\"5\"\/>";
-    DRPTemplate += "                                        <\/div>";
-    DRPTemplate += "                                    <\/div>";
-    DRPTemplate += "                                    <div class='form-date-actions'>";
-    DRPTemplate += "                                        <button class='btn btn-link' type='button' id=\"datepicker-cancel\"";
-    DRPTemplate += "                                                tabindex=\"7\">";
-    DRPTemplate += "                                            <i class='fa-remove'><\/i>";
-    DRPTemplate += "                                            Cancel";
-    DRPTemplate += "                                        <\/button>";
-    DRPTemplate += "                                        <button class='btn btn-default pull-right' type='submit'";
-    DRPTemplate += "                                                name=\"submitDateRange\" tabindex=\"6\">";
-    DRPTemplate += "                                            <i class='fa-ok text-success'><\/i>";
-    DRPTemplate += "                                            Apply";
-    DRPTemplate += "                                        <\/button>";
-    DRPTemplate += "                                    <\/div>";
-    DRPTemplate += "                                <\/div>";
-    DRPTemplate += "                            <\/div>";
-    DRPTemplate += "                        <\/div>";
-    DRPTemplate += "                    <\/div>";
-    DRPTemplate += "                <\/div>";
-    DRPTemplate += "            <\/div>";
-    DRPTemplate += "        <\/form>";
-    DRPTemplate += "    <\/div>";
-    DRPTemplate += "<\/div>";
+                                                                      "</div>";
+    DRPTemplate +=          '<div class="datepicker_start_input">' +
+                              '<label for="datepicker_start">From</label>' +
+                              '<input class="date-input input-mini" type="text" id="date-start-compare" name="datepicker_start" />' +
+                            '</div>' +
+                            '<div class="datepicker_end_input">' +
+                              '<label for="datepicker_end">To</label>' +
+                              '<input class="date-input input-mini" type="text" id="date-end-compare" name="datepicker_end" />' +
+                            '</div>' +
+                            '<div class="datepicker_buttons">' +
+                              '<button class="applyBt btn btn-small btn-sm btn-success">Apply</button>&nbsp;' +
+                              '<button class="cancelBt btn btn-small btn-sm btn-default">Cancel</button>' +
+                            '</div>' +
+                          '</div>' +
+                        '</div>' +
+                      '</div>';
+
+//    var DRPTemplate = "";
+//    DRPTemplate += "<div class=\"bootstrap\">";
+//    DRPTemplate += "    <div id=\"calendar\" class=\"panel\">";
+//    DRPTemplate += "        <form action=\"\" method=\"post\" id=\"calendar_form\" name=\"calendar_form\" class=\"form-inline\">";
+//    DRPTemplate += "            <div class=\"form-group pull-right\">";
+//    DRPTemplate += "                <button id=\"datepickerExpand\" class=\"btn btn-default\" type=\"button\">";
+//    DRPTemplate += "							      <span class=\"hidden-xs\">";
+//    DRPTemplate += "                      <strong class=\"text-info\" id=\"datepicker-from-info\"><\/strong>";
+//    DRPTemplate += "                      -";
+//    DRPTemplate += "                      <strong class=\"text-info\" id=\"datepicker-to-info\"><\/strong>";
+//    DRPTemplate += "								      <strong class=\"text-info\" id=\"datepicker-diff-info\"><\/strong>";
+//    DRPTemplate += "							      <\/span>";
+//    DRPTemplate += "                    <i class=\"fa fa-caret-down\"><\/i>";
+//    DRPTemplate += "                <\/button>";
+//    DRPTemplate += "            <\/div>";
+//    DRPTemplate += "            <div id=\"datepicker\" class=\"row row-padding-top\">";
+//    DRPTemplate += "                <div class=\"col-lg-12\">";
+//    DRPTemplate += "                    <div class=\"daterangepicker-days\">";
+//    DRPTemplate += "                        <div class=\"row\">";
+//    DRPTemplate += "                            <div class=\"col-sm-6 col-lg-4\">";
+//    DRPTemplate += "                                <div  id=\"datepicker1\" class=\"datepicker\" data-date=\"\"><\/div>";
+//    DRPTemplate += "                            <\/div>";
+//    DRPTemplate += "                            <div class=\"col-sm-6 col-lg-4\">";
+//    DRPTemplate += "                                <div id=\"datepicker2\" class=\"datepicker\" data-date=\"\"><\/div>";
+//    DRPTemplate += "                            <\/div>";
+//    DRPTemplate += "                            <div class=\"col-xs-12 col-sm-6 col-lg-4 pull-right\">";
+//    DRPTemplate += "                             <div id='datepicker-form' class='form-inline'>";
+//    DRPTemplate += "                            <select id=\"range\">";
+//    DRPTemplate += "                               <option value=\"day\">";
+//    DRPTemplate += "                                Day";
+//    DRPTemplate += "                               <\/option>";
+//    DRPTemplate += "                               <option value=\"month\">";
+//    DRPTemplate += "                                   Month";
+//    DRPTemplate += "                               <\/option>";
+//    DRPTemplate += "                               <option value=\"monthCur\">";
+//    DRPTemplate += "                                   Current Month";
+//    DRPTemplate += "                               <\/option>";
+//    DRPTemplate += "                               <option value=\"year\">";
+//    DRPTemplate += "                                   Year";
+//    DRPTemplate += "                               <\/option>";
+//    DRPTemplate += "                               <option value=\"dayPrev\">";
+//    DRPTemplate += "                                   Day-1";
+//    DRPTemplate += "                               <\/option>";
+//    DRPTemplate += "                               <option value=\"monthPrev\">";
+//    DRPTemplate += "                                   Month-1";
+//    DRPTemplate += "                               <\/option>";
+//    DRPTemplate += "                               <option value=\"yearPrev\">";
+//    DRPTemplate += "                                   Year-1";
+//    DRPTemplate += "                               <\/option>";
+//    DRPTemplate += "                             <\/select>";
+//    DRPTemplate += "                                    <div id='date-range' class='form-date-group'>";
+//    DRPTemplate += "                                        <div class='form-date-heading'>";
+//    DRPTemplate += "                                            <span class=\"title\">Date range<\/span>";
+//    DRPTemplate += "                                        <\/div>";
+//    DRPTemplate += "                                        <div class='form-date-body'>";
+//    DRPTemplate += "                                            <input class='date-input form-control' id='date-start'";
+//    DRPTemplate += "                                                   placeholder='Start' type='text' name=\"date_from\" value=\"\"";
+//    DRPTemplate += "                                                    tabindex=\"1\"\/>";
+//    DRPTemplate += "                                            <span>-<\/span>";
+//    DRPTemplate += "                                            <input class='date-input form-control' id='date-end' placeholder='End'";
+//    DRPTemplate += "                                                   type='text' name=\"date_to\" value=\"\"";
+//    DRPTemplate += "                                                   tabindex=\"2\"\/>";
+//    DRPTemplate += "                                        <\/div>";
+//    DRPTemplate += "                                    <\/div>";
+//    DRPTemplate += "                                    <div id=\"date-compare\" class='form-date-group'>";
+//    DRPTemplate += "                                        <div class='form-date-heading'>";
+//    DRPTemplate += "                                                <span class=\"checkbox-title\">";
+//    DRPTemplate += "                                                    <label>";
+//    DRPTemplate += "                                                        <input type='checkbox' id=\"datepicker-compare\"";
+//    DRPTemplate += "                                                               name=\"datepicker_compare\" tabindex=\"3\">";
+//    DRPTemplate += "                                                        Compare to";
+//    DRPTemplate += "                                                    <\/label>";
+//    DRPTemplate += "                                                <\/span>";
+//    DRPTemplate += "                                            <select id=\"compare-options\"";
+//    DRPTemplate += "                                                    class=\"form-control fixed-width-lg pull-right\"";
+//    DRPTemplate += "                                                    name=\"compare_date_option\">";
+//    DRPTemplate += "                                                <option value=\"1\" selected=\"selected\"";
+//    DRPTemplate += "                                                        label=\"Previous period\">Previous period";
+//    DRPTemplate += "                                                <\/option>";
+//    DRPTemplate += "                                                <option value=\"2\"";
+//    DRPTemplate += "                                                        label=\"Previous Year\">Previous year";
+//    DRPTemplate += "                                                <\/option>";
+//    DRPTemplate += "                                                <option value=\"3\" label=\"Custom\">Custom<\/option>";
+//    DRPTemplate += "                                            <\/select>";
+//    DRPTemplate += "                                        <\/div>";
+//    DRPTemplate += "                                        <div class=\"form-date-body\" id=\"form-date-body-compare\"";
+//    DRPTemplate += "                                             style=\"display: none;\">";
+//    DRPTemplate += "                                            <label>From<\/label>";
+//    DRPTemplate += "                                            <input id=\"date-start-compare\" class=\"date-input form-control\"";
+//    DRPTemplate += "                                                   type=\"text\" placeholder=\"Start\" name=\"compare_date_from\" value=\"\"";
+//    DRPTemplate += "                                                   tabindex=\"4\"\/>";
+//    DRPTemplate += "                                            <label>to<\/label>";
+//    DRPTemplate += "                                            <input id=\"date-end-compare\" class=\"date-input form-control\" type=\"text\"";
+//    DRPTemplate += "                                                   placeholder=\"End\" name=\"compare_date_to\" value=\"\"";
+//    DRPTemplate += "                                                    ";
+//    DRPTemplate += "                                                   tabindex=\"5\"\/>";
+//    DRPTemplate += "                                        <\/div>";
+//    DRPTemplate += "                                    <\/div>";
+//    DRPTemplate += "                                    <div class='form-date-actions'>";
+//    DRPTemplate += "                                        <button class='btn btn-link' type='button' id=\"datepicker-cancel\"";
+//    DRPTemplate += "                                                tabindex=\"7\">";
+//    DRPTemplate += "                                            <i class='fa-remove'><\/i>";
+//    DRPTemplate += "                                            Cancel";
+//    DRPTemplate += "                                        <\/button>";
+//    DRPTemplate += "                                        <button class='btn btn-default pull-right' type='submit'";
+//    DRPTemplate += "                                                name=\"submitDateRange\" tabindex=\"6\">";
+//    DRPTemplate += "                                            <i class='fa-ok text-success'><\/i>";
+//    DRPTemplate += "                                            Apply";
+//    DRPTemplate += "                                        <\/button>";
+//    DRPTemplate += "                                    <\/div>";
+//    DRPTemplate += "                                <\/div>";
+//    DRPTemplate += "                            <\/div>";
+//    DRPTemplate += "                        <\/div>";
+//    DRPTemplate += "                    <\/div>";
+//    DRPTemplate += "                <\/div>";
+//    DRPTemplate += "            <\/div>";
+//    DRPTemplate += "        <\/form>";
+//    DRPTemplate += "    <\/div>";
+//    DRPTemplate += "<\/div>";
 
     if (typeof options !== 'object' || options === null)
       options = {};
 
-    this.parentEl = (typeof options === 'object' && options.parentEl && $(options.parentEl).length) ? $(options.parentEl) : $(this.parentEl);
-    this.container = $(DRPTemplate).appendTo(this.parentEl);
+    this.container = $(DRPTemplate).appendTo(this.element);
 
     startDateElt = this.container.find('#date-start');
     endDateElt = this.container.find('#date-end');
@@ -166,7 +235,7 @@
 
     this.setOptions(options, cb);
 
-    datePickerStart = this.container.find('.datepicker1').calendar({
+    datePickerStart = this.container.find('#datepicker1').calendar({
       "dates": translated_dates,
       "weekStart": 1,
       "start": startDateElt.val(),
@@ -181,7 +250,7 @@
     }).on('pickerChange', $.proxy(this.datePickerStartChange, this))
       .data('calendar');
 
-    datePickerEnd = this.container.find('.datepicker2').calendar({
+    datePickerEnd = this.container.find('#datepicker2').calendar({
       "dates": translated_dates,
       "weekStart": 1,
       "start": startDateElt.val(),
@@ -295,8 +364,10 @@
       if (element && value) {
         element.val(new Date(value).format(format));
         element.removeClass("input-selected").addClass("input-complete");
-        if (element === endDateElt)
+        if (element === endDateElt) {
           this.updateCompareRange();
+          this.notify();
+        }
       }
       return element;
     },
