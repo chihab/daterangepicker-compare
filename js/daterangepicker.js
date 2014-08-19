@@ -21,10 +21,19 @@
   var format = null;
 
   var DRP = function (element, options, cb) {
-    //element that triggered the date range picker
     this.element = $(element);
 
-    var DRPTemplate = '<div class="datepicker dropdown-menu opensleft show-calendar" style="left: auto; display: block;">'+
+    var DRPTemplate = '<div class="form-group pull-right">'+
+                        '<button id="datepickerExpand" class="btn btn-default" type="button">' +
+                          '<span class="hidden-xs"> ' +
+                            '<strong class="text-info" id="datepicker-from-info"></strong>' +
+                            ' - '+
+                            '<strong class="text-info" id="datepicker-to-info"></strong>' +
+                            '<strong class="text-info" id="datepicker-diff-info"></strong>' +
+                          '</span>'+
+                          '<i class="fa fa-caret-down"></i></button>'+
+                      '</div>'+
+                      '<div class="datepicker dropdown-menu opensleft show-calendar" style="left: auto; display: block;">'+
                         '<div id="datepicker1" class="calendar left" data-date=""></div>'+
                         '<div id="datepicker2" class="calendar right" data-date=""></div>'+
                         '<div class="ranges">'+
@@ -128,11 +137,10 @@
         datePickerStart.setValue(ev.date.setMonth(ev.date.getMonth() - 1));
       }
     }).on('mouseenter', function () {
-        datePickerStart.fillMonthEnd();
+      datePickerStart.fillMonthEnd();
     }).on('pickerChange', $.proxy(this.datePickerEndChange, this))
       .data('calendar');
 
-    //Set first date picker to month -1 if same month
     var startDate = this.start();
     var endDate = this.end();
 
@@ -140,10 +148,10 @@
       datePickerStart.setValue(startDate.subMonths(1));
 
     //Events binding
-    startDateElt.on('change', $.proxy(this.startDateChange, this));
-    endDateElt.on('change', $.proxy(this.endDateChange, this));
-    startDateCompareElt.on('change', $.proxy(this.startDateCompareChange, this));
-    endDateCompareElt.on('change', $.proxy(this.endDateCompareChange, this));
+    startDateElt.on('change', $.proxy(this.dateChange, this));
+    endDateElt.on('change', $.proxy(this.dateChange, this));
+    startDateCompareElt.on('change', $.proxy(this.dateChange, this));
+    endDateCompareElt.on('change', $.proxy(this.dateChange, this));
     compareElt.on('click', $.proxy(this.compareClick, this));
 
     this.container.find('#range').on('change', $.proxy(this.setPeriod, this));
@@ -232,7 +240,9 @@
         element.val(new Date(value).format(format));
         element.removeClass("input-selected").addClass("input-complete");
         if (element === endDateElt) {
-          this.updateCompareRange();
+          this.dateChange();
+        }
+        else {
           this.notify();
         }
       }
@@ -251,28 +261,16 @@
         datePickerStart.clearRange();
     },
 
-    startDateChange: function (event) {
-      this.updatePickerFromInput();
+    dateChange: function (event) {
+      this.updateCalendarRange();
+      this.updateCalendarCompareRange();
       this.notify();
-    },
-
-    endDateChange: function (event) {
-      this.updatePickerFromInput();
-      this.notify();
-    },
-
-    startDateCompareChange: function (event) {
-      this.updatePickerFromInput();
-      this.notify();
-    },
-
-    endDateCompareChange: function (event) {
-      this.updatePickerFromInput();
-      this.notify();
+      this.updateDateInfo();
     },
 
     compareOptionsChange: function (event) {
-      this.updateCompareRange();
+      this.updateCalendarCompareRange();
+      this.notify();
       if (event.target.value == 3)
         startDateCompareElt.focus();
     },
@@ -290,58 +288,11 @@
         $('#form-date-body-compare').hide();
         $('#compare-options').prop('disabled', true);
         startDateElt.focus();
-        this.notify();
       }
     },
 
-    updateCompareRange: function () {
-      if (compareElt.is(':checked')) {
-        var compare = true;
-        if ($('#compare-options').val() == 1) {
-          compare = false;
-          this.setComparePreviousPeriod();
-        }
-
-        if ($('#compare-options').val() == 2) {
-          compare = false;
-          this.setComparePreviousPeriod();
-        }
-        datePickerStart.setStartCompare(startDateCompareElt.val());
-        datePickerStart.setEndCompare(endDateCompareElt.val());
-        datePickerEnd.setStartCompare(startDateCompareElt.val());
-        datePickerEnd.setEndCompare(endDateCompareElt.val());
-        datePickerStart.setCompare(compare);
-        datePickerEnd.setCompare(compare);
-      }
-    },
-
-    updatePickerInput: function (start, end, startCompare, endCompare, compare) {
-      if (start)
-        startDateElt.val(new Date(start).format(format));
-      if (end)
-        endDateElt.val(new Date(end).format(format));
-      if (startCompare)
-        startDateCompareElt.val(new Date(startCompare).format(format));
-      if (endCompare)
-        startDateCompareElt.val(new Date(endCompare).format(format));
-      compareElt.prop('checked', compare);
-      this.updatePickerFromInput();
-      this.compareClick();
-    },
-
-    updatePickerFromInput: function () {
-      datePickerStart.setStart(startDateElt.val());
-      datePickerStart.setEnd(endDateElt.val());
-      datePickerEnd.setStart(startDateElt.val());
-      datePickerEnd.setValue(Date.parseDate(endDateElt.val(), format).setDate(1));
-      datePickerStart.setValue(datePickerStart.date.setFullYear(datePickerEnd.date.getFullYear(), datePickerEnd.date.getMonth() - 1, 1));
-      datePickerStart.updateRange();
-      datePickerEnd.updateRange();
-      this.updateCompareRange();
-    },
-
-    setPeriod: function(event) {
-      switch(event.target.value){
+    setPeriod: function (event) {
+      switch (event.target.value) {
         case 'day':
           this.setDayPeriod();
           break;
@@ -368,18 +319,14 @@
           this.setCurrentMonthPeriod();
           break;
       }
+      ;
+      this.dateChange();
     },
 
     setDayPeriod: function () {
       var date = new Date();
       startDateElt.val(date.format(format));
       endDateElt.val(date.format(format));
-
-      this.updatePickerFromInput();
-      startDateInfo.html(startDateElt.val());
-      endDateInfo.html(endDateElt.val());
-      this.container.find('#preselectDateRange').val('day');
-      this.notify();
     },
 
     setPreviousDayPeriod: function () {
@@ -387,11 +334,6 @@
       date = date.subDays(1);
       startDateElt.val(date.format(format));
       endDateElt.val(date.format(format));
-      this.notify();
-      this.updatePickerFromInput();
-      startDateInfo.html(startDateElt.val());
-      endDateInfo.html(endDateElt.val());
-      this.container.find('#preselectDateRange').val('prev-day');
     },
 
     setMonthPeriod: function () {
@@ -399,11 +341,6 @@
       endDateElt.val(date.format(format));
       date = date.subDays(30);
       startDateElt.val(date.format(format));
-      this.notify();
-      this.updatePickerFromInput();
-      startDateInfo.html(startDateElt.val());
-      endDateInfo.html(endDateElt.val());
-      this.container.find('#preselectDateRange').val('month');
     },
 
     setCurrentMonthPeriod: function () {
@@ -411,11 +348,6 @@
       endDateElt.val(date.format(format));
       date = new Date(date.setDate(1));
       startDateElt.val(date.format(format));
-      this.notify();
-      this.updatePickerFromInput();
-      startDateInfo.html(startDateElt.val());
-      endDateInfo.html(endDateElt.val());
-      this.container.find('#preselectDateRange').val('month');
     },
 
     setPreviousMonthPeriod: function () {
@@ -424,11 +356,6 @@
       endDateElt.val(date.format(format));
       date = new Date(date.setDate(1));
       startDateElt.val(date.format(format));
-      this.notify();
-      this.updatePickerFromInput();
-      startDateInfo.html(startDateElt.val());
-      endDateInfo.html(endDateElt.val());
-      this.container.find('#preselectDateRange').val('prev-month');
     },
 
     setYearPeriod: function () {
@@ -436,11 +363,6 @@
       endDateElt.val(date.format(format));
       date = new Date(date.getFullYear(), 0, 1);
       startDateElt.val(date.format(format));
-      this.notify();
-      this.updatePickerFromInput();
-      startDateInfo.html(startDateElt.val());
-      endDateInfo.html(endDateElt.val());
-      this.container.find('#preselectDateRange').val('year');
     },
 
     setPreviousYearPeriod: function () {
@@ -450,11 +372,6 @@
       endDateElt.val(date.format(format));
       date = new Date(date.getFullYear(), 0, 1);
       startDateElt.val(date.format(format));
-      this.notify();
-      this.updatePickerFromInput();
-      startDateInfo.html(startDateElt.val());
-      endDateInfo.html(endDateElt.val());
-      this.container.find('#preselectDateRange').val('prev-year');
     },
 
     setComparePreviousPeriod: function () {
@@ -466,15 +383,64 @@
 
       endDateCompareElt.val(startDate.format(format));
       startDateCompareElt.val(startDateCompare.format(format));
-      this.notify();
     },
 
     setComparePreviousYear: function () {
       var startDate = Date.parseDate(startDateElt.val(), format).subYears(1);
       var endDate = Date.parseDate(endDateElt.val(), format).subYears(1);
+
       startDateCompareElt.val(startDate.format(format));
       endDateCompareElt.val(endDate.format(format));
-      this.notify();
+    },
+
+    updatePickerInput: function (start, end, startCompare, endCompare, compare) {
+      if (start)
+        startDateElt.val(new Date(start).format(format));
+      if (end)
+        endDateElt.val(new Date(end).format(format));
+      if (startCompare)
+        startDateCompareElt.val(new Date(startCompare).format(format));
+      if (endCompare)
+        startDateCompareElt.val(new Date(endCompare).format(format));
+      compareElt.prop('checked', compare);
+      this.updateCalendarRange();
+      this.compareClick();
+    },
+
+    updateCalendarRange: function () {
+      datePickerStart.setStart(startDateElt.val());
+      datePickerStart.setEnd(endDateElt.val());
+      datePickerEnd.setStart(startDateElt.val());
+      datePickerEnd.setValue(Date.parseDate(endDateElt.val(), format).setDate(1));
+      datePickerStart.setValue(datePickerStart.date.setFullYear(datePickerEnd.date.getFullYear(), datePickerEnd.date.getMonth() - 1, 1));
+      datePickerStart.updateRange();
+      datePickerEnd.updateRange();
+    },
+
+    updateCalendarCompareRange: function () {
+      if (compareElt.is(':checked')) {
+        var compare = true;
+        if ($('#compare-options').val() == 1) {
+          compare = false;
+          this.setComparePreviousPeriod();
+        }
+
+        if ($('#compare-options').val() == 2) {
+          compare = false;
+          this.setComparePreviousYear();
+        }
+        datePickerStart.setStartCompare(startDateCompareElt.val());
+        datePickerStart.setEndCompare(endDateCompareElt.val());
+        datePickerEnd.setStartCompare(startDateCompareElt.val());
+        datePickerEnd.setEndCompare(endDateCompareElt.val());
+        datePickerStart.setCompare(compare);
+        datePickerEnd.setCompare(compare);
+      }
+    },
+
+    updateDateInfo: function () {
+      startDateInfo.html(startDateElt.val());
+      endDateInfo.html(endDateElt.val());
     },
 
     notify: function () {
