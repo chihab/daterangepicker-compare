@@ -329,12 +329,12 @@
     color: #00a4e7;
     height: 2em;
     padding: 0 8px;
-    -webkit-transition-property: all;
-    transition-property: all;
-    -webkit-transition-duration: 0.2s;
-    transition-duration: 0.2s;
-    -webkit-transition-timing-function: ease-out;
-    transition-timing-function: ease-out
+    /*-webkit-transition-property: all;*/
+    /*transition-property: all;*/
+    /*-webkit-transition-duration: 0.2s;*/
+    /*transition-duration: 0.2s;*/
+    /*-webkit-transition-timing-function: ease-out;*/
+    /*transition-timing-function: ease-out*/
 }
 
 .datepicker .calendar td.day:after {
