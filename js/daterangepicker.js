@@ -20,6 +20,7 @@
   var compareElt = null;
   var format = null;
   var container = null;
+  var callback = null;
 
   var DRP = function (element, options, cb) {
     this.element = $(element);
@@ -101,19 +102,19 @@
     if (typeof options !== 'object' || options === null)
       options = {};
 
-    this.container = container = $(DRPTemplate).appendTo(this.element);
+    container = $(DRPTemplate).appendTo(this.element);
 
-    startDateElt = this.container.find('#date-start');
-    endDateElt = this.container.find('#date-end');
-    startDateCompareElt = this.container.find('#date-start-compare');
-    endDateCompareElt = this.container.find('#date-end-compare');
-    compareElt = this.container.find('#datepicker-compare');
-    startDateInfo = this.container.find('#datepicker-from-info');
-    endDateInfo = this.container.find('#datepicker-to-info');
+    startDateElt = container.find('#date-start');
+    endDateElt = container.find('#date-end');
+    startDateCompareElt = container.find('#date-start-compare');
+    endDateCompareElt = container.find('#date-end-compare');
+    compareElt = container.find('#datepicker-compare');
+    startDateInfo = container.find('#datepicker-from-info');
+    endDateInfo = container.find('#datepicker-to-info');
 
     this.setOptions(options, cb);
 
-    datePickerStart = this.container.find('#datepicker1').calendar({
+    datePickerStart = container.find('#datepicker1').calendar({
       "dates": translated_dates,
       "weekStart": 1,
       "start": startDateElt.val(),
@@ -128,7 +129,7 @@
     }).on('pickerChange', $.proxy(this.datePickerStartChange, this))
       .data('calendar');
 
-    datePickerEnd = this.container.find('#datepicker2').calendar({
+    datePickerEnd = container.find('#datepicker2').calendar({
       "dates": translated_dates,
       "weekStart": 1,
       "start": startDateElt.val(),
@@ -156,17 +157,17 @@
     endDateCompareElt.on('change', $.proxy(this.dateChange, this));
     compareElt.on('click', $.proxy(this.compareClick, this));
 
-    this.container.find('#range').on('change', $.proxy(this.setPeriod, this));
-    this.container.find('#compare-options').on('change', $.proxy(this.compareOptionsChange, this));
+    container.find('#range').on('change', $.proxy(this.setPeriod, this));
+    container.find('#compare-options').on('change', $.proxy(this.compareOptionsChange, this));
 
     this.setDayPeriod();
     this.dateChange();
 
-    this.container.find('#datepicker-cancel').click(function () {
+    container.find('#datepicker-cancel').click(function () {
       container.find('#datepicker').addClass('hide');
     });
 
-    this.container.find('#datepicker').show(function () {
+    container.find('#datepicker').show(function () {
       startDateElt.focus();
     });
 
@@ -282,16 +283,16 @@
 
     compareClick: function (event) {
       if (compareElt.is(':checked')) {
-        this.container.find('#compare-options').trigger('change');
-        this.container.find('#form-date-body-compare').show();
-        this.container.find('#compare-options').prop('disabled', false);
+        container.find('#compare-options').trigger('change');
+        container.find('#form-date-body-compare').show();
+        container.find('#compare-options').prop('disabled', false);
       } else {
         datePickerStart.setStartCompare(null);
         datePickerStart.setEndCompare(null);
         datePickerEnd.setStartCompare(null);
         datePickerEnd.setEndCompare(null);
-        this.container.find('#form-date-body-compare').hide();
-        this.container.find('#compare-options').prop('disabled', true);
+        container.find('#form-date-body-compare').hide();
+        container.find('#compare-options').prop('disabled', true);
         startDateElt.focus();
       }
     },
@@ -424,12 +425,12 @@
     updateCalendarCompareRange: function () {
       if (compareElt.is(':checked')) {
         var compare = true;
-        if (this.container.find('#compare-options').val() == 1) {
+        if (container.find('#compare-options').val() == 1) {
           compare = false;
           this.setComparePreviousPeriod();
         }
 
-        if (this.container.find('#compare-options').val() == 2) {
+        if (container.find('#compare-options').val() == 2) {
           compare = false;
           this.setComparePreviousYear();
         }
@@ -448,8 +449,8 @@
     },
 
     notify: function () {
-      if (this.cb)
-        this.cb(this.start(), this.end(), this.compareStart(), this.compareEnd(), this.compare());
+      if (callback)
+        callback(this.start(), this.end(), this.compareStart(), this.compareEnd(), this.compare());
     },
 
     start: function () {
@@ -472,20 +473,19 @@
       return compareElt.is(':checked');
     },
 
-    setOptions: function (options, callback) {
+    setOptions: function (options, _callback) {
       format = 'Y-mm-dd';
-      this.cb = function () {
-      };
+
       if (typeof options.format === 'string')
         format = options.format;
 
-      if (typeof callback === 'function') {
-        this.cb = callback;
+      if (_callback && typeof _callback === 'function') {
+        callback = _callback;
       }
     },
 
     remove: function () {
-      this.container.remove();
+      container.remove();
       this.element.off('.drp');
       this.element.removeData('drp');
     }
