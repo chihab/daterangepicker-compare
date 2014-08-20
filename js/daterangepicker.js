@@ -17,8 +17,9 @@
   var datePickerStart = null, datePickerEnd = null;
   var startDateElt = null, endDateElt = null, startDateCompareElt = null, endDateCompareElt = null;
   var startDateInfo = null, endDateInfo = null;
-  var compareElt = null;
-  var format = null;
+  var periodElt = null;
+  var compareElt = null, compareOptions = null;
+  var infoFormat = null, format = null;
   var container = null;
   var callback = null;
 
@@ -40,6 +41,9 @@
                           '<div id="datepicker2" class="calendar right" data-date=""></div>'+
                           '<div class="ranges">'+
                             '<select id="range" class="form-control fixed-width-lg pull-right">'+
+                              '<option value="custom">'+
+                              'Custom'+
+                              '</option>'+
                               '<option value="day">'+
                                 'Day'+
                               '</option>'+
@@ -82,7 +86,7 @@
                                   '<option value="3" label="Custom">Custom</option>'+
                                 '</select>'+
                               '</div>'+
-                              '<div id="form-date-body-compare"><div class="datepicker_start_input">'+
+                              '<div id="form-date-body-compare" style="display: none"><div class="datepicker_start_input">'+
                                 '<label for="datepicker_start">From</label>'+
                                 '<input class="date-input input-mini" type="text" id="date-start-compare" name="datepicker_start" />'+
                               '</div>'+
@@ -109,16 +113,16 @@
     startDateCompareElt = container.find('#date-start-compare');
     endDateCompareElt = container.find('#date-end-compare');
     compareElt = container.find('#datepicker-compare');
+    compareOptions = container.find('#compare-options');
     startDateInfo = container.find('#datepicker-from-info');
     endDateInfo = container.find('#datepicker-to-info');
+    periodElt = container.find('#range');
 
     this.setOptions(options, cb);
 
     datePickerStart = container.find('#datepicker1').calendar({
       "dates": translated_dates,
       "weekStart": 1,
-      "start": startDateElt.val(),
-      "end": endDateElt.val(),
       "format": format
     }).on('changeDate', function (ev) {
       if (ev.date.valueOf() >= datePickerEnd.viewDate.valueOf()) {
@@ -132,8 +136,6 @@
     datePickerEnd = container.find('#datepicker2').calendar({
       "dates": translated_dates,
       "weekStart": 1,
-      "start": startDateElt.val(),
-      "end": endDateElt.val(),
       "format": format
     }).on('changeDate', function (ev) {
       if (ev.date.valueOf() <= datePickerStart.viewDate.valueOf()) {
@@ -156,12 +158,14 @@
     startDateCompareElt.on('change', $.proxy(this.dateChange, this));
     endDateCompareElt.on('change', $.proxy(this.dateChange, this));
     compareElt.on('click', $.proxy(this.compareClick, this));
+    compareOptions.on('change', $.proxy(this.compareOptionsChange, this));
 
-    container.find('#range').on('change', $.proxy(this.setPeriod, this));
-    container.find('#compare-options').on('change', $.proxy(this.compareOptionsChange, this));
+    periodElt.on('change', $.proxy(this.setPeriod, this));
 
-    this.setDayPeriod();
-    this.dateChange();
+    if (startDateElt.val() != '')
+      this.dateChange();
+    else
+      periodElt.trigger('change');
 
     container.find('#datepicker-cancel').click(function () {
       container.find('#datepicker').addClass('hide');
@@ -188,7 +192,7 @@
     startDateCompareElt.focus(function () {
       datePickerStart.setCompare(true);
       datePickerEnd.setCompare(true);
-      container.find('#compare-options').val(3);
+      compareOptions.val(3);
       container.find(".date-input").removeClass("input-selected");
       $(this).addClass("input-selected");
     });
@@ -196,22 +200,22 @@
     endDateCompareElt.focus(function () {
       datePickerStart.setCompare(true);
       datePickerEnd.setCompare(true);
-      container.find('#compare-options').val(3);
+      compareOptions.val(3);
       container.find(".date-input").removeClass("input-selected");
       $(this).addClass("input-selected");
     });
-
-    if (compareElt.is(':checked')) {
-      if (startDateCompareElt.val().replace(/^\s+|\s+$/g, '').length == 0)
-        container.find('#compare-options').trigger('change');
-
-      datePickerStart.setStartCompare(startDateCompareElt.val());
-      datePickerStart.setEndCompare(endDateCompareElt.val());
-      datePickerEnd.setStartCompare(startDateCompareElt.val());
-      datePickerEnd.setEndCompare(endDateCompareElt.val());
-      datePickerStart.setCompare(true);
-      datePickerEnd.setCompare(true);
-    }
+//
+//    if (compareElt.is(':checked')) {
+//      if (startDateCompareElt.val().replace(/^\s+|\s+$/g, '').length == 0)
+//        compareOptions.trigger('change');
+//
+//      datePickerStart.setStartCompare(startDateCompareElt.val());
+//      datePickerStart.setEndCompare(endDateCompareElt.val());
+//      datePickerEnd.setStartCompare(startDateCompareElt.val());
+//      datePickerEnd.setEndCompare(endDateCompareElt.val());
+//      datePickerStart.setCompare(true);
+//      datePickerEnd.setCompare(true);
+//    }
 
     container.find('#datepickerExpand').on('click', function () {
       if (container.find('.datepicker').hasClass('hide')) {
@@ -283,16 +287,16 @@
 
     compareClick: function (event) {
       if (compareElt.is(':checked')) {
-        container.find('#compare-options').trigger('change');
+        compareOptions.trigger('change');
         container.find('#form-date-body-compare').show();
-        container.find('#compare-options').prop('disabled', false);
+        compareOptions.prop('disabled', false);
       } else {
         datePickerStart.setStartCompare(null);
         datePickerStart.setEndCompare(null);
         datePickerEnd.setStartCompare(null);
         datePickerEnd.setEndCompare(null);
         container.find('#form-date-body-compare').hide();
-        container.find('#compare-options').prop('disabled', true);
+        compareOptions.prop('disabled', true);
         startDateElt.focus();
       }
     },
@@ -425,12 +429,12 @@
     updateCalendarCompareRange: function () {
       if (compareElt.is(':checked')) {
         var compare = true;
-        if (container.find('#compare-options').val() == 1) {
+        if (compareOptions.val() == 1) {
           compare = false;
           this.setComparePreviousPeriod();
         }
 
-        if (container.find('#compare-options').val() == 2) {
+        if (compareOptions.val() == 2) {
           compare = false;
           this.setComparePreviousYear();
         }
@@ -444,8 +448,8 @@
     },
 
     updateDateInfo: function () {
-      startDateInfo.html(startDateElt.val());
-      endDateInfo.html(endDateElt.val());
+      startDateInfo.html(this.start().format(infoFormat));
+      endDateInfo.html(this.end().format(infoFormat));
     },
 
     notify: function () {
@@ -473,15 +477,68 @@
       return compareElt.is(':checked');
     },
 
+    /*
+        format: 'dd/mm/Y',
+        infoFormat': 'd/m/Y',
+        startDate: '2013-01-01',
+        endDate: '2013-12-31'
+     color:  '#FFEEFF'
+     compareColor: '#FFEFRDD'
+     period: {'name': function(start, end)}
+        compare: true,
+        comparePeriod: 1, 2 or 3
+        compareStartDate: '2013-01-01'
+        compareEndDate: '2013-01-01'
+     */
     setOptions: function (options, _callback) {
-      format = 'Y-mm-dd';
+      format = infoFormat = 'Y-mm-dd';
+
+      if (typeof _callback === 'function')
+        callback = _callback;
 
       if (typeof options.format === 'string')
         format = options.format;
 
-      if (_callback && typeof _callback === 'function') {
-        callback = _callback;
+      if (typeof options.period === 'string')
+        periodElt.val(options.period);
+      else
+        periodElt.val('monthCur');
+
+      if (typeof options.infoFormat === 'string')
+        infoFormat = options.infoFormat;
+
+      if (typeof options.startDate === 'string')
+        startDateElt.val(options.startDate);
+
+      if (typeof options.endDate === 'string')
+        endDateElt.val(options.endDate);
+
+      if (typeof options.compare === 'boolean' && options.compare){
+        compareElt.prop('checked', true);
+        container.find('#form-date-body-compare').show();
       }
+
+      if (typeof options.comparePeriod === 'string'){
+        if (options.comparePeriod == 'previous')
+          compareOptions.val(1);
+        else if (options.comparePeriod == 'previousYear')
+          compareOptions.val(2);
+        else if (options.comparePeriod == 'custom')
+          compareOptions.val(3);
+        else
+          compareOptions.val(1);
+      }
+
+      if (typeof options.compareStartDate === 'string'){
+        startDateCompareElt.val(options.compareStartDate);
+        compareOptions.val(3);
+      }
+
+      if (typeof options.compareEndDate === 'string'){
+        endDateCompareElt.val(options.compareEndDate);
+        compareOptions.val(3);
+      }
+
     },
 
     remove: function () {
