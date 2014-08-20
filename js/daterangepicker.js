@@ -41,9 +41,6 @@
                           '<div id="datepicker2" class="calendar right" data-date=""></div>'+
                           '<div class="ranges">'+
                             '<select id="range" class="form-control fixed-width-lg pull-right">'+
-                              '<option value="custom">'+
-                              'Custom'+
-                              '</option>'+
                               '<option value="day">'+
                                 'Day'+
                               '</option>'+
@@ -328,6 +325,9 @@
         case 'monthCur':
           this.setCurrentMonthPeriod();
           break;
+        case 'custom':
+          this.setCustomPeriod();
+          break;
       };
       this.dateChange();
     },
@@ -482,9 +482,8 @@
         infoFormat': 'd/m/Y',
         startDate: '2013-01-01',
         endDate: '2013-12-31'
-     color:  '#FFEEFF'
-     compareColor: '#FFEFRDD'
-     period: {'name': function(start, end)}
+        period: string
+        customPeriod: object
         compare: true,
         comparePeriod: 1, 2 or 3
         compareStartDate: '2013-01-01'
@@ -498,6 +497,14 @@
 
       if (typeof options.format === 'string')
         format = options.format;
+
+      if (typeof options.customPeriod == 'object'){
+        this.setCustomPeriod = function(){
+          startDateElt.val(options.customPeriod.start().format(format));
+          endDateElt.val(options.customPeriod.end().format(format));
+        };
+        periodElt.append($("<option></option>").val('custom').html(options.customPeriod.name));
+      }
 
       if (typeof options.period === 'string')
         periodElt.val(options.period);
