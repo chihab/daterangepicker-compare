@@ -22,6 +22,35 @@
   var infoFormat = null, format = null;
   var container = null;
   var callback = null;
+  var periods = [];
+
+  var addPeriod = function (period) {
+    periods.push(
+      {
+        name: period.name,
+        callback: function(){
+          var end = period.end();
+          endDateElt.val(end.format(format));
+          startDateElt.val(period.start(end).format(format));
+        },
+        active: true
+      }
+    );
+  };
+
+//  var removePeriods = function (periods) {
+//    periods.push(
+//      {
+//        name: period.name,
+//        value: period.value,
+//        callback: function(){
+//          startDateElt.val(period.start().format(format));
+//          endDateElt.val(period.end().format(format));
+//        },
+//        active: true
+//      }
+//    );
+//  };
 
   var DRP = function (element, options, cb) {
     this.element = $(element);
@@ -41,27 +70,6 @@
                           '<div id="datepicker2" class="calendar right" data-date=""></div>'+
                           '<div class="ranges">'+
                             '<select id="range" class="form-control fixed-width-lg pull-right">'+
-                              '<option value="day">'+
-                                'Day'+
-                              '</option>'+
-                              '<option value="month">'+
-                                'Month'+
-                              '</option>'+
-                              '<option value="monthCur">'+
-                                'Current Month'+
-                              '</option>'+
-                              '<option value="year">'+
-                                'Year'+
-                              '</option>'+
-                              '<option value="dayPrev">'+
-                                'Day-1'+
-                              '</option>'+
-                              '<option value="monthPrev">'+
-                                'Month-1'+
-                              '</option>'+
-                              '<option value="yearPrev">'+
-                                'Year-1'+
-                              '</option>'+
                             '</select>'+
                             '<div class="range_inputs">'+
                               '<div class="datepicker_start_input">'+
@@ -116,6 +124,11 @@
     periodElt = container.find('#range');
 
     this.setOptions(options, cb);
+
+    periods.forEach(function(period){
+      if (period.active)
+        periodElt.append($("<option></option>").val(period.name).html(period.name));
+    });
 
     datePickerStart = container.find('#datepicker1').calendar({
       "dates": translated_dates,
@@ -299,88 +312,11 @@
     },
 
     setPeriod: function (event) {
-      switch (event.target.value) {
-        case 'day':
-          this.setDayPeriod();
-          break;
-        default:
-        case 'month':
-          this.setMonthPeriod();
-          break;
-        case 'monthCur':
-          this.setCurrentMonthPeriod();
-          break;
-        case 'year':
-          this.setYearPeriod();
-          break;
-        case 'dayPrev':
-          this.setPreviousDayPeriod();
-          break;
-        case 'monthPrev':
-          this.setPreviousMonthPeriod();
-          break;
-        case 'yearPrev':
-          this.setPreviousYearPeriod();
-          break;
-        case 'monthCur':
-          this.setCurrentMonthPeriod();
-          break;
-        case 'custom':
-          this.setCustomPeriod();
-          break;
-      };
+      periods.forEach(function(period){
+        if (period.name == event.target.value)
+          period.callback();
+      });
       this.dateChange();
-    },
-
-    setDayPeriod: function () {
-      var date = new Date();
-      startDateElt.val(date.format(format));
-      endDateElt.val(date.format(format));
-    },
-
-    setPreviousDayPeriod: function () {
-      var date = new Date();
-      date = date.subDays(1);
-      startDateElt.val(date.format(format));
-      endDateElt.val(date.format(format));
-    },
-
-    setMonthPeriod: function () {
-      var date = new Date().subDays(1);
-      endDateElt.val(date.format(format));
-      date = date.subDays(30);
-      startDateElt.val(date.format(format));
-    },
-
-    setCurrentMonthPeriod: function () {
-      var date = new Date();
-      endDateElt.val(date.format(format));
-      date = new Date(date.setDate(1));
-      startDateElt.val(date.format(format));
-    },
-
-    setPreviousMonthPeriod: function () {
-      var date = new Date();
-      date = new Date(date.getFullYear(), date.getMonth(), 0);
-      endDateElt.val(date.format(format));
-      date = new Date(date.setDate(1));
-      startDateElt.val(date.format(format));
-    },
-
-    setYearPeriod: function () {
-      var date = new Date();
-      endDateElt.val(date.format(format));
-      date = new Date(date.getFullYear(), 0, 1);
-      startDateElt.val(date.format(format));
-    },
-
-    setPreviousYearPeriod: function () {
-      var date = new Date();
-      date = new Date(date.getFullYear(), 11, 31);
-      date = date.subYears(1);
-      endDateElt.val(date.format(format));
-      date = new Date(date.getFullYear(), 0, 1);
-      startDateElt.val(date.format(format));
     },
 
     setComparePreviousPeriod: function () {
@@ -477,19 +413,8 @@
       return compareElt.is(':checked');
     },
 
-    /*
-        format: 'dd/mm/Y',
-        infoFormat': 'd/m/Y',
-        startDate: '2013-01-01',
-        endDate: '2013-12-31'
-        period: string
-        customPeriod: object
-        compare: true,
-        comparePeriod: 1, 2 or 3
-        compareStartDate: '2013-01-01'
-        compareEndDate: '2013-01-01'
-     */
     setOptions: function (options, _callback) {
+      var defaultPeriod = 'monthCur';
       format = infoFormat = 'Y-mm-dd';
 
       if (typeof _callback === 'function')
@@ -498,18 +423,21 @@
       if (typeof options.format === 'string')
         format = options.format;
 
-      if (typeof options.customPeriod == 'object'){
-        this.setCustomPeriod = function(){
-          startDateElt.val(options.customPeriod.start().format(format));
-          endDateElt.val(options.customPeriod.end().format(format));
-        };
-        periodElt.append($("<option></option>").val('custom').html(options.customPeriod.name));
+      if (typeof options.periods === 'object' && options.periods.length > 0){
+        options.periods.forEach(function(period){
+          addPeriod(period);
+        });
       }
 
-      if (typeof options.period === 'string')
+//      if (typeof options.activePeriods === 'object' && options.activePeriods.length > 0){
+//        defaultPeriod = options.activePeriods[0];
+//        activatePeriods(options.activePeriods);
+//      }
+
+      if (typeof options.defaultPeriod === 'string')
         periodElt.val(options.period);
       else
-        periodElt.val('monthCur');
+        periodElt.val(defaultPeriod);
 
       if (typeof options.infoFormat === 'string')
         infoFormat = options.infoFormat;

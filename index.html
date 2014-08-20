@@ -18,12 +18,85 @@
             monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         };
         $(document).ready(function () {
-            $('#calender').drp({'format': 'dd/mm/Y'}, function(start, end, cmpStart, cmpEnd){
-//                console.log(start, end, cmpStart, cmpEnd);
-            });
+            $('#drp').drp(
+                    {
+                        format: 'dd/mm/Y',
+                        infoFormat: 'dd Y',
+//                        startDate: '01/08/2014',
+//                        endDate: '15/08/2014',
+                        periods: [{
+                            name: "Today",
+                            start: function(end){
+                                return end;
+                            },
+                            end: function(){
+                                return new Date();
+                            }
+                        },{
+                            name: "Yesterday",
+                            start: function(end){
+                                return end;
+                            },
+                            end: function(){
+                                return new Date().subDays(1);
+                            }
+                        },{
+                            name: "Last 30 days",
+                            start: function(end){
+                                return end.subDays(30);
+                            },
+                            end: function(){
+                                return new Date().subDays(1);
+                            }
+                        },{
+                            name: "Current Month",
+                            start: function(end){
+                                return new Date(end.setDate(1));
+                            },
+                            end: function(){
+                                return new Date().subDays(1);
+                            }
+                        },{
+                            name: "Previous Month",
+                            start: function(end){
+                                return new Date(end.setDate(1));
+                            },
+                            end: function(){
+                                var now = new Date();
+                                return new Date(now.getFullYear(), now.getMonth(), 0);
+                            }
+                        },{
+                            name: "Current Year",
+                            start: function(end){
+                                return new Date(end.getFullYear(), 0, 1);;
+                            },
+                            end: function(){
+                                return new Date();
+                            }
+                        },{
+                            name: "Previous Year",
+                            start: function(end){
+                                return new Date(end.getFullYear(), 0, 1);
+                            },
+                            end: function(){
+                                return new Date(new Date().getFullYear(), 11, 31).subYears(1);
+                            }
+                        }],
+                        defaultPeriod: 'Custom Period',
+//                        activePeriods: ['month', 'custom'],
+                        compare: false,
+                        comparePeriod: 'previous'
+//                        compareStartDate: '14/08/2014',
+//                        compareEndDate: '15/08/2014'
+                    },
+                    function(start, end, cmpStart, cmpEnd){
+                        console.log(start, end, cmpStart, cmpEnd);
+                    }
+            );
         });
     </script>
 </head>
 <body>
-<div id="calender"/>
+    <div id="drp"/>
+<!--<div id="calendar" data-date="01/01/2014"/>-->
 </body>
