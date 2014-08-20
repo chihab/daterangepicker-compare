@@ -38,7 +38,7 @@
 
 .datepicker .calendar {
     display: block;
-    max-width: 270px;
+    min-width: 270px;
 }
 
 .datepicker.show-calendar .calendar {
@@ -281,6 +281,18 @@
 
 .datepicker th.month {
     width: auto;
+}
+
+.datepicker td span {
+    padding: 0;
+    display: block;
+    width: 33.333%;
+    height: 3em;
+    line-height: 3em;
+    font-weight: 400;
+    float: left;
+    text-transform: uppercase;
+    cursor: pointer;
 }
 
 /****************/
