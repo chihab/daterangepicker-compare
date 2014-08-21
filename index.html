@@ -5,6 +5,8 @@
     <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
 
     <link href="css/datepicker.bs.css" rel="stylesheet" type="text/css"/>
+
+    <script src="bower_components/moment/min/moment-with-locales.min.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/calendar.js"></script>
     <script src="js/daterangepicker.js"></script>
@@ -21,7 +23,7 @@
             $('#daterangepicker').daterangepicker(
                     {
                         format: 'dd/mm/Y',
-                        infoFormat: 'dd Y',
+                        infoFormat: 'LL', // moment format
 //                        startDate: '01/08/2014',
 //                        endDate: '15/08/2014',
                         periods: [

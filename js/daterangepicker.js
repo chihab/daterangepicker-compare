@@ -448,8 +448,8 @@
     },
 
     updateDateInfo: function () {
-      startDateInfo.html(this.start().format(infoFormat));
-      endDateInfo.html(this.end().format(infoFormat));
+      startDateInfo.html(moment(this.start()).format(infoFormat));
+      endDateInfo.html(moment(this.end()).format(infoFormat));
     },
 
     notify: function () {
@@ -490,7 +490,8 @@
      compareEndDate: '2013-01-01'
      */
     setOptions: function (options, _callback) {
-      format = infoFormat = 'Y-mm-dd';
+      format = 'Y-mm-dd';
+      infoFormat = 'LL';
 
       if (typeof _callback === 'function')
         callback = _callback;

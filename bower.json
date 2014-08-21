@@ -25,6 +25,7 @@
   ],
   "dependencies": {
     "bootstrap": "latest",
-    "font-awesome": "latest"
+    "font-awesome": "latest",
+    "moment": "~2.8.1"
   }
 }
