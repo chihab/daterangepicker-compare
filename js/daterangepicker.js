@@ -2,7 +2,7 @@
 
   if (typeof define === 'function' && define.amd) {
     define(['jquery', 'exports'], function ($, exports) {
-      root.drp = factory(root, exports, $);
+      root.daterangepicker = factory(root, exports, $);
     });
 
   } else if (typeof exports !== 'undefined') {
@@ -10,10 +10,10 @@
 
     // Finally, as a browser global.
   } else {
-    root.drp = factory(root, {}, (root.jQuery || root.Zepto || root.ender || root.$));
+    root.daterangepicker = factory(root, {}, (root.jQuery || root.Zepto || root.ender || root.$));
   }
 
-}(this, function (root, drp, $) {
+}(this, function (root, daterangepicker, $) {
   var datePickerStart = null, datePickerEnd = null;
   var startDateElt = null, endDateElt = null, startDateCompareElt = null, endDateCompareElt = null;
   var startDateInfo = null, endDateInfo = null;
@@ -54,7 +54,7 @@
 //    );
 //  };
 
-  var DRP = function (element, options, cb) {
+  var DateRangePicker = function (element, options, cb) {
     this.element = $(element);
 
     var DRPTemplate = '<div class="form-group pull-right">'+
@@ -87,7 +87,7 @@
                                   '<input type="checkbox" id="datepicker-compare" name="datepicker_compare" tabindex="3" />'+
                                   'Compare to'+
                                 '</label>'+
-                                '<select id="compare-options" class="form-control fixed-width-lg pull-right" disa name="compare_date_option">'+
+                                '<select id="compare-options" class="form-control fixed-width-lg pull-right" disabled name="compare_date_option">'+
                                   '<option value="1" selected="selected" label="Previous period">Previous period </option>'+
                                   '<option value="2" label="Previous Year">Previous year</option>'+
                                   '<option value="3" label="Custom">Custom</option>'+
@@ -301,8 +301,8 @@
     });
   };
 
-  DRP.prototype = {
-    constructor: DRP,
+  DateRangePicker.prototype = {
+    constructor: DateRangePicker,
 
     datePickerChange: function (event, input, value) {
       var element = null;
@@ -551,18 +551,18 @@
 
     remove: function () {
       container.remove();
-      this.element.off('.drp');
-      this.element.removeData('drp');
+      this.element.off('.daterangepicker');
+      this.element.removeData('daterangepicker');
     }
 
   };
 
-  $.fn.drp = function (options, cb) {
+  $.fn.daterangepicker = function (options, cb) {
     this.each(function () {
       var el = $(this);
-      if (el.data('drp'))
-        el.data('drp').remove();
-      el.data('drp', new DRP(el, options, cb));
+      if (el.data('daterangepicker'))
+        el.data('daterangepicker').remove();
+      el.data('daterangepicker', new DateRangePicker(el, options, cb));
     });
     return this;
   };
