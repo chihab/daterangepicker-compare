@@ -23,15 +23,17 @@
   var container = null;
   var callback = null;
   var periods = [];
+  var defaultPeriod = null;
 
-  var addPeriod = function (period) {
+  var addPeriod = function (_period) {
+    var period = _period();
     periods.push(
       {
         name: period.name,
         callback: function(){
-          var end = period.end();
+          var end = period.end;
           endDateElt.val(end.format(format));
-          startDateElt.val(period.start(end).format(format));
+          startDateElt.val(period.start.format(format));
         },
         active: true
       }
@@ -85,7 +87,7 @@
                                   '<input type="checkbox" id="datepicker-compare" name="datepicker_compare" tabindex="3" />'+
                                   'Compare to'+
                                 '</label>'+
-                                '<select id="compare-options" class="form-control fixed-width-lg pull-right" name="compare_date_option">'+
+                                '<select id="compare-options" class="form-control fixed-width-lg pull-right" disa name="compare_date_option">'+
                                   '<option value="1" selected="selected" label="Previous period">Previous period </option>'+
                                   '<option value="2" label="Previous Year">Previous year</option>'+
                                   '<option value="3" label="Custom">Custom</option>'+
@@ -123,12 +125,74 @@
     endDateInfo = container.find('#datepicker-to-info');
     periodElt = container.find('#range');
 
+    [function (){
+      var date = new Date();
+      return {
+        name: "Today",
+        start: date,
+        end: date
+      }
+    },
+      function (){
+        var date = new Date().subDays(1);
+        return {
+          name: "Yesterday",
+          start: date,
+          end:  date
+        };
+      },
+      function (){
+        var end = new Date().subDays(1);
+        return {
+          name: "Last 30 days",
+          end:  end,
+          start: new Date(end).subDays(30)
+        };
+      },
+      function (){
+        var end = new Date().subDays(1);
+        return {
+          name: "Current Month",
+          end:  end,
+          start: new Date(new Date(end).setDate(1))
+        };
+      },
+      function (){
+        var now = new Date();
+        var end = new Date(now.getFullYear(), now.getMonth(), 0);
+        return {
+          name: "Previous Month",
+          end:  end,
+          start: new Date(new Date(end).setDate(1))
+        }
+      },
+      function (){
+        var end = new Date();
+        return {
+          name: "Current Year",
+          end: end,
+          start: new Date(end.getFullYear(), 0, 1)
+        };
+      },
+      function (){
+        var end = new Date(new Date().getFullYear(), 11, 31).subYears(1);
+        return {
+          name: "Previous Year",
+          end: end,
+          start: new Date(end.getFullYear(), 0, 1)
+        };
+      }].forEach(function(period){
+        addPeriod(period);
+      });
+
     this.setOptions(options, cb);
 
     periods.forEach(function(period){
       if (period.active)
         periodElt.append($("<option></option>").val(period.name).html(period.name));
     });
+    if (defaultPeriod)
+      periodElt.val(defaultPeriod);
 
     datePickerStart = container.find('#datepicker1').calendar({
       "dates": translated_dates,
@@ -413,8 +477,19 @@
       return compareElt.is(':checked');
     },
 
+    /*
+     format: 'dd/mm/Y',
+     infoFormat': 'd/m/Y',
+     startDate: '2013-01-01',
+     endDate: '2013-12-31'
+     period: string
+     customPeriod: object
+     compare: true,
+     comparePeriod: 1, 2 or 3
+     compareStartDate: '2013-01-01'
+     compareEndDate: '2013-01-01'
+     */
     setOptions: function (options, _callback) {
-      var defaultPeriod = 'monthCur';
       format = infoFormat = 'Y-mm-dd';
 
       if (typeof _callback === 'function')
@@ -435,9 +510,7 @@
 //      }
 
       if (typeof options.defaultPeriod === 'string')
-        periodElt.val(options.period);
-      else
-        periodElt.val(defaultPeriod);
+        defaultPeriod = options.defaultPeriod;
 
       if (typeof options.infoFormat === 'string')
         infoFormat = options.infoFormat;

@@ -24,65 +24,17 @@
                         infoFormat: 'dd Y',
 //                        startDate: '01/08/2014',
 //                        endDate: '15/08/2014',
-                        periods: [{
-                            name: "Today",
-                            start: function(end){
-                                return end;
-                            },
-                            end: function(){
-                                return new Date();
+                        periods: [
+                            function (){
+                                var end = new Date().subDays(1);
+                                return {
+                                    name: "Last 15 days",
+                                    end:  end,
+                                    start: new Date(end).subDays(15)
+                                };
                             }
-                        },{
-                            name: "Yesterday",
-                            start: function(end){
-                                return end;
-                            },
-                            end: function(){
-                                return new Date().subDays(1);
-                            }
-                        },{
-                            name: "Last 30 days",
-                            start: function(end){
-                                return end.subDays(30);
-                            },
-                            end: function(){
-                                return new Date().subDays(1);
-                            }
-                        },{
-                            name: "Current Month",
-                            start: function(end){
-                                return new Date(end.setDate(1));
-                            },
-                            end: function(){
-                                return new Date().subDays(1);
-                            }
-                        },{
-                            name: "Previous Month",
-                            start: function(end){
-                                return new Date(end.setDate(1));
-                            },
-                            end: function(){
-                                var now = new Date();
-                                return new Date(now.getFullYear(), now.getMonth(), 0);
-                            }
-                        },{
-                            name: "Current Year",
-                            start: function(end){
-                                return new Date(end.getFullYear(), 0, 1);;
-                            },
-                            end: function(){
-                                return new Date();
-                            }
-                        },{
-                            name: "Previous Year",
-                            start: function(end){
-                                return new Date(end.getFullYear(), 0, 1);
-                            },
-                            end: function(){
-                                return new Date(new Date().getFullYear(), 11, 31).subYears(1);
-                            }
-                        }],
-                        defaultPeriod: 'Custom Period',
+                        ],
+                        defaultPeriod: 'Last 15 days',
 //                        activePeriods: ['month', 'custom'],
                         compare: false,
                         comparePeriod: 'previous'
@@ -97,6 +49,6 @@
     </script>
 </head>
 <body>
-    <div id="drp"/>
+<div id="drp"/>
 <!--<div id="calendar" data-date="01/01/2014"/>-->
 </body>
