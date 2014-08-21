@@ -39,7 +39,8 @@
                         defaultPeriod: 'Last 15 days',
 //                        activePeriods: ['month', 'custom'],
                         compare: false,
-                        comparePeriod: 'previous'
+                        comparePeriod: 'previous',
+                        opens: 'left'
 //                        compareStartDate: '14/08/2014',
 //                        compareEndDate: '15/08/2014'
                     },
@@ -51,5 +52,8 @@
     </script>
 </head>
 <body>
-    <div id="daterangepicker"/>
+    <div>
+        <div id="daterangepicker" class="pull-right" style="cursor: pointer;"/>
+    </div>
+</div>
 </body>

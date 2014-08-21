@@ -21,9 +21,11 @@
   var compareElt = null, compareOptions = null;
   var infoFormat = null, format = null;
   var container = null;
+  var info = null;
   var callback = null;
   var periods = [];
   var defaultPeriod = null;
+  var opens = null;
 
   var addPeriod = function (_period) {
     var period = _period();
@@ -56,22 +58,24 @@
 
   var DateRangePicker = function (element, options, cb) {
     this.element = $(element);
+    this.parentEl = $('body');
 
-    var DRPTemplate = '<div class="form-group pull-right">'+
-                        '<button id="datepickerExpand" class="btn btn-default" type="button">' +
-                          '<span class="hidden-xs"> ' +
-                            '<strong class="text-info" id="datepicker-from-info"></strong>' +
-                            ' - '+
-                            '<strong class="text-info" id="datepicker-to-info"></strong>' +
-                            '<strong class="text-info" id="datepicker-diff-info"></strong>' +
-                          '</span>'+
-                          '&nbsp;<i class="fa fa-caret-down"></i></button>'+
-                      '</div>'+
-                      '<div class="datepicker dropdown-menu opensleft show-calendar" style="display: block;">'+
+    var DRTInfo = '<div>'+
+                    '<button id="datepickerExpand" class="btn btn-default" type="button">' +
+                    '<span class="hidden-xs"> ' +
+                    '<strong class="text-info" id="datepicker-from-info"></strong>' +
+                    ' - '+
+                    '<strong class="text-info" id="datepicker-to-info"></strong>' +
+                    '<strong class="text-info" id="datepicker-diff-info"></strong>' +
+                    '</span>'+
+                    '&nbsp;<i class="fa fa-caret-down"></i></button>'+
+                  '</div>';
+    var DRPTemplate =
+                      '<div class="datepicker dropdown-menu opensleft show-calendar hide" style="display: block;">'+
                           '<div id="datepicker1" class="calendar left" data-date=""></div>'+
                           '<div id="datepicker2" class="calendar right" data-date=""></div>'+
                           '<div class="ranges">'+
-                            '<select id="range" class="form-control fixed-width-lg pull-right">'+
+                            '<select id="range" class="form-control fixed-width-lg pull-left">'+
                             '</select>'+
                             '<div class="range_inputs">'+
                               '<div class="datepicker_start_input">'+
@@ -87,7 +91,7 @@
                                   '<input type="checkbox" id="datepicker-compare" name="datepicker_compare" tabindex="3" />'+
                                   'Compare to'+
                                 '</label>'+
-                                '<select id="compare-options" class="form-control fixed-width-lg pull-right" disabled name="compare_date_option">'+
+                                '<select id="compare-options" class="form-control fixed-width-lg pull-left" disabled name="compare_date_option">'+
                                   '<option value="1" selected="selected" label="Previous period">Previous period </option>'+
                                   '<option value="2" label="Previous Year">Previous year</option>'+
                                   '<option value="3" label="Custom">Custom</option>'+
@@ -113,7 +117,8 @@
     if (typeof options !== 'object' || options === null)
       options = {};
 
-    container = $(DRPTemplate).appendTo(this.element);
+    info = $(DRTInfo).appendTo(this.element);
+    container = $(DRPTemplate).appendTo(this.parentEl);
 
     startDateElt = container.find('#date-start');
     endDateElt = container.find('#date-end');
@@ -121,8 +126,8 @@
     endDateCompareElt = container.find('#date-end-compare');
     compareElt = container.find('#datepicker-compare');
     compareOptions = container.find('#compare-options');
-    startDateInfo = container.find('#datepicker-from-info');
-    endDateInfo = container.find('#datepicker-to-info');
+    startDateInfo = info.find('#datepicker-from-info');
+    endDateInfo = info.find('#datepicker-to-info');
     periodElt = container.find('#range');
 
     [function (){
@@ -220,6 +225,8 @@
     }).on('pickerChange', $.proxy(this.datePickerEndChange, this))
       .data('calendar');
 
+    this.move();
+
     var startDate = this.start();
     var endDate = this.end();
 
@@ -241,11 +248,11 @@
     else
       periodElt.trigger('change');
 
-    container.find('#datepicker-cancel').click(function () {
-      container.find('#datepicker').addClass('hide');
+    container.find('.cancelBt').click(function () {
+      container.addClass('hide');
     });
 
-    container.find('#datepicker').show(function () {
+    container.show(function () {
       startDateElt.focus();
     });
 
@@ -291,13 +298,13 @@
 //      datePickerEnd.setCompare(true);
 //    }
 
-    container.find('#datepickerExpand').on('click', function () {
-      if (container.find('.datepicker').hasClass('hide')) {
-        container.find('.datepicker').removeClass('hide');
+    info.find('#datepickerExpand').on('click', function () {
+      if (container.hasClass('hide')) {
+        container.removeClass('hide');
         startDateElt.focus();
       }
       else
-        container.find('.datepicker').addClass('hide');
+        container.addClass('hide');
     });
   };
 
@@ -477,6 +484,41 @@
       return compareElt.is(':checked');
     },
 
+    move: function () {
+      var parentOffset = { top: 0, left: 0 };
+      if (!this.parentEl.is('body')) {
+        parentOffset = {
+          top: this.parentEl.offset().top - this.parentEl.scrollTop(),
+          left: this.parentEl.offset().left - this.parentEl.scrollLeft()
+        };
+      }
+
+      if (opens == 'left') {
+        container.css({
+          top: this.element.offset().top + this.element.outerHeight() - parentOffset.top,
+          right: $(window).width() - this.element.offset().left - this.element.outerWidth() - parentOffset.left,
+          left: 'auto'
+        });
+        if (container.offset().left < 0) {
+          container.css({
+            right: 'auto',
+            left: 9
+          });
+        }
+      } else {
+        container.css({
+          top: this.element.offset().top + this.element.outerHeight() - parentOffset.top,
+          left: this.element.offset().left - parentOffset.left,
+          right: 'auto'
+        });
+        if (container.offset().left + container.outerWidth() > $(window).width()) {
+          container.css({
+            left: 'auto',
+            right: 0
+          });
+        }
+      }
+    },
     /*
      format: 'dd/mm/Y',
      infoFormat': 'd/m/Y',
@@ -492,6 +534,7 @@
     setOptions: function (options, _callback) {
       format = 'Y-mm-dd';
       infoFormat = 'LL';
+      opens = 'right';
 
       if (typeof _callback === 'function')
         callback = _callback;
@@ -504,6 +547,9 @@
           addPeriod(period);
         });
       }
+
+      if (typeof options.opens === 'string')
+        opens = options.opens;
 
 //      if (typeof options.activePeriods === 'object' && options.activePeriods.length > 0){
 //        defaultPeriod = options.activePeriods[0];
