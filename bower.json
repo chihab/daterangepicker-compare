@@ -18,10 +18,10 @@
     "tests"
   ],
   "main": [
+    "css/daterangepicker.css",
     "js/utils.js",
-    "js/date-range-picker.js",
-    "js/daterangepicker.js",
-    "css/datepicker.css"
+    "js/calendar.js",
+    "js/daterangepicker.js"
   ],
   "dependencies": {
     "bootstrap": "latest",
