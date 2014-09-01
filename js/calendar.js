@@ -31,7 +31,7 @@
       DPGlobal.dates = options.dates;
     }
     
-    format = DPGlobal.parseFormat(options.format || 'Y-mm-dd');
+    format = options.format;
 
     if (typeof options.start !== 'undefined') {
       if (options.start.constructor === String && options.start != "") {
@@ -737,69 +737,19 @@
     getDaysInMonth: function (year, month) {
       return [31, (DPGlobal.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
     },
-    parseFormat: function (format) {
-      var separator = format.match(/[.\/\-\s].*?/),
-        parts = format.split(/\W+/);
-      if (!separator || !parts || parts.length === 0) {
-        throw new Error("Invalid date format.");
-      }
-      return {separator: separator, parts: parts};
-    },
+//    parseFormat: function (format) {
+//      var separator = format.match(/[.\/\-\s].*?/),
+//        parts = format.split(/\W+/);
+//      if (!separator || !parts || parts.length === 0) {
+//        throw new Error("Invalid date format.");
+//      }
+//      return {separator: separator, parts: parts};
+//    },
     parseDate: function (date, format) {
-      var parts = date.split(format.separator),
-        date = new Date(),
-        val;
-      date.setHours(0);
-      date.setMinutes(0);
-      date.setSeconds(0);
-      date.setMilliseconds(0);
-      if (parts.length === format.parts.length) {
-        var year = date.getFullYear(), day = date.getDate(), month = date.getMonth();
-        for (var i = 0, cnt = format.parts.length; i < cnt; i++) {
-          val = parseInt(parts[i], 10) || 1;
-          switch (format.parts[i]) {
-            case 'dd':
-            case 'd':
-              day = val;
-              date.setDate(val);
-              break;
-            case 'mm':
-            case 'm':
-              month = val - 1;
-              date.setMonth(val - 1);
-              break;
-            case 'yy':
-            case 'y':
-              year = 2000 + val;
-              date.setFullYear(2000 + val);
-              break;
-            case 'yyyy':
-            case 'Y':
-              year = val;
-              date.setFullYear(val);
-              break;
-          }
-        }
-        date = new Date(year, month, day, 0, 0, 0);
-      }
-      return date;
+      return Date.parseDate(date, format);
     },
     formatDate: function (date, format) {
-      var val = {
-        d: date.getDate(),
-        m: date.getMonth() + 1,
-        yy: date.getFullYear().toString().substring(2),
-        y: date.getFullYear().toString().substring(2),
-        yyyy: date.getFullYear(),
-        Y: date.getFullYear()
-      };
-      val.dd = (val.d < 10 ? '0' : '') + val.d;
-      val.mm = (val.m < 10 ? '0' : '') + val.m;
-      var date = [];
-      for (var i = 0, cnt = format.parts.length; i < cnt; i++) {
-        date.push(val[format.parts[i]]);
-      }
-      return date.join(format.separator);
+      return new Date(date).format(format);
     },
     headTemplate: '<thead>' +
       '<tr>' +
