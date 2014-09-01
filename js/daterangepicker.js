@@ -443,8 +443,7 @@
           compare = false;
           this.setComparePreviousPeriod();
         }
-
-        if (compareOptions.val() == 2) {
+        else if (compareOptions.val() == 2) {
           compare = false;
           this.setComparePreviousYear();
         }
