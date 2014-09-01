@@ -61,58 +61,58 @@
     this.parentEl = $('body');
 
     var DRTInfo = '<div>'+
-                    '<button id="datepickerExpand" class="btn btn-default" type="button">' +
-                    '<span class="hidden-xs"> ' +
-                    '<strong class="text-info" id="datepicker-from-info"></strong>' +
-                    ' - '+
-                    '<strong class="text-info" id="datepicker-to-info"></strong>' +
-                    '<strong class="text-info" id="datepicker-diff-info"></strong>' +
-                    '</span>'+
-                    '&nbsp;<i class="fa fa-caret-down"></i></button>'+
-                  '</div>';
+      '<button id="datepickerExpand" class="btn btn-default" type="button">' +
+      '<span class="hidden-xs"> ' +
+      '<strong class="text-info" id="datepicker-from-info"></strong>' +
+      ' - '+
+      '<strong class="text-info" id="datepicker-to-info"></strong>' +
+      '<strong class="text-info" id="datepicker-diff-info"></strong>' +
+      '</span>'+
+      '&nbsp;<i class="fa fa-caret-down"></i></button>'+
+      '</div>';
     var DRPTemplate =
-                      '<div class="datepicker dropdown-menu opensleft show-calendar hide" style="display: block;">'+
-                          '<div id="datepicker1" class="calendar left" data-date=""></div>'+
-                          '<div id="datepicker2" class="calendar right" data-date=""></div>'+
-                          '<div class="ranges">'+
-                            '<select id="range" class="form-control fixed-width-lg pull-left">'+
-                            '</select>'+
-                            '<div class="range_inputs">'+
-                              '<div class="datepicker_start_input">'+
-                                '<label for="datepicker_start">From</label>'+
-                                '<input class="date-input input-mini" type="text" id="date-start" name="datepicker_start" />'+
-                              '</div>'+
-                              '<div class="datepicker_end_input">'+
-                                '<label for="datepicker_end">To</label>'+
-                                '<input class="date-input input-mini" type="text" id="date-end" name="datepicker_end" />'+
-                              '</div>'+
-                              '<div class="datepicker_compare">'+
-                                '<label for="datepicker-compare">'+
-                                  '<input type="checkbox" id="datepicker-compare" name="datepicker_compare" tabindex="3" />'+
-                                  'Compare to'+
-                                '</label>'+
-                                '<select id="compare-options" class="form-control fixed-width-lg pull-left" disabled name="compare_date_option">'+
-                                  '<option value="1" selected="selected" label="Previous period">Previous period </option>'+
-                                  '<option value="2" label="Previous Year">Previous year</option>'+
-                                  '<option value="3" label="Custom">Custom</option>'+
-                                '</select>'+
-                              '</div>'+
-                              '<div id="form-date-body-compare" style="display: none"><div class="datepicker_start_input">'+
-                                '<label for="datepicker_start">From</label>'+
-                                '<input class="date-input input-mini" type="text" id="date-start-compare" name="datepicker_start" />'+
-                              '</div>'+
-                              '<div class="datepicker_end_input">'+
-                                '<label for="datepicker_end">To</label>'+
-                                '<input class="date-input input-mini" type="text" id="date-end-compare" name="datepicker_end" />'+
-                              '</div></div>'+
-                              '<div class="datepicker_buttons">'+
-                                '<button class="applyBt btn btn-small btn-sm btn-success">Apply</button>&nbsp;'+
-                                '<button class="cancelBt btn btn-small btn-sm btn-default">Cancel</button>'+
-                              '</div>'+
-                            '</div>'+
-                          '</div>'+
-                        '</div>'+
-                      '</div>';
+      '<div class="datepicker dropdown-menu opensleft show-calendar hide" style="display: block;">'+
+      '<div id="datepicker1" class="calendar left" data-date=""></div>'+
+      '<div id="datepicker2" class="calendar right" data-date=""></div>'+
+      '<div class="ranges">'+
+      '<select id="range" class="form-control fixed-width-lg pull-left">'+
+      '</select>'+
+      '<div class="range_inputs">'+
+      '<div class="datepicker_start_input">'+
+      '<label for="datepicker_start">From</label>'+
+      '<input class="date-input input-mini" type="text" id="date-start" name="datepicker_start" />'+
+      '</div>'+
+      '<div class="datepicker_end_input">'+
+      '<label for="datepicker_end">To</label>'+
+      '<input class="date-input input-mini" type="text" id="date-end" name="datepicker_end" />'+
+      '</div>'+
+      '<div class="datepicker_compare">'+
+      '<label for="datepicker-compare">'+
+      '<input type="checkbox" id="datepicker-compare" name="datepicker_compare" tabindex="3" />'+
+      'Compare to'+
+      '</label>'+
+      '<select id="compare-options" class="form-control fixed-width-lg pull-left" disabled name="compare_date_option">'+
+      '<option value="1" selected="selected" label="Previous period">Previous period </option>'+
+      '<option value="2" label="Previous Year">Previous year</option>'+
+      '<option value="3" label="Custom">Custom</option>'+
+      '</select>'+
+      '</div>'+
+      '<div id="form-date-body-compare" style="display: none"><div class="datepicker_start_input">'+
+      '<label for="datepicker_start">From</label>'+
+      '<input class="date-input input-mini" type="text" id="date-start-compare" name="datepicker_start" />'+
+      '</div>'+
+      '<div class="datepicker_end_input">'+
+      '<label for="datepicker_end">To</label>'+
+      '<input class="date-input input-mini" type="text" id="date-end-compare" name="datepicker_end" />'+
+      '</div></div>'+
+      '<div class="datepicker_buttons">'+
+      '<button class="applyBt btn btn-small btn-sm btn-success">Apply</button>&nbsp;'+
+      '<button class="cancelBt btn btn-small btn-sm btn-default">Cancel</button>'+
+      '</div>'+
+      '</div>'+
+      '</div>'+
+      '</div>'+
+      '</div>';
 
     if (typeof options !== 'object' || options === null)
       options = {};
@@ -241,7 +241,7 @@
     compareElt.on('click', $.proxy(this.compareClick, this));
     compareOptions.on('change', $.proxy(this.compareOptionsChange, this));
 
-    periodElt.on('change', $.proxy(this.setPeriod, this));
+    periodElt.on('change', $.proxy(this.periodChange, this));
 
     if (startDateElt.val() != '')
       this.dateChange();
@@ -285,18 +285,6 @@
       container.find(".date-input").removeClass("input-selected");
       $(this).addClass("input-selected");
     });
-//
-//    if (compareElt.is(':checked')) {
-//      if (startDateCompareElt.val().replace(/^\s+|\s+$/g, '').length == 0)
-//        compareOptions.trigger('change');
-//
-//      datePickerStart.setStartCompare(startDateCompareElt.val());
-//      datePickerStart.setEndCompare(endDateCompareElt.val());
-//      datePickerEnd.setStartCompare(startDateCompareElt.val());
-//      datePickerEnd.setEndCompare(endDateCompareElt.val());
-//      datePickerStart.setCompare(true);
-//      datePickerEnd.setCompare(true);
-//    }
 
     info.find('#datepickerExpand').on('click', function () {
       if (container.hasClass('hide')) {
@@ -369,20 +357,14 @@
     compareClick: function (event) {
       if (compareElt.is(':checked')) {
         compareOptions.trigger('change');
-        container.find('#form-date-body-compare').show();
-        compareOptions.prop('disabled', false);
+        this.compareActivate();
       } else {
-        datePickerStart.setStartCompare(null);
-        datePickerStart.setEndCompare(null);
-        datePickerEnd.setStartCompare(null);
-        datePickerEnd.setEndCompare(null);
-        container.find('#form-date-body-compare').hide();
-        compareOptions.prop('disabled', true);
-        startDateElt.focus();
+        this.compareDeactivate();
+        this.notify();
       }
     },
 
-    setPeriod: function (event) {
+    periodChange: function (event) {
       periods.forEach(function(period){
         if (period.name == event.target.value)
           period.callback();
@@ -409,6 +391,21 @@
       endDateCompareElt.val(endDate.format(format));
     },
 
+    compareActivate: function() {
+      container.find('#form-date-body-compare').show();
+      compareOptions.prop('disabled', false);
+    },
+
+    compareDeactivate: function() {
+      datePickerStart.setStartCompare(null);
+      datePickerStart.setEndCompare(null);
+      datePickerEnd.setStartCompare(null);
+      datePickerEnd.setEndCompare(null);
+      container.find('#form-date-body-compare').hide();
+      compareOptions.prop('disabled', true);
+      startDateElt.focus();
+    },
+
     updatePickerInput: function (start, end, startCompare, endCompare, compare) {
       if (start)
         startDateElt.val(new Date(start).format(format));
@@ -420,7 +417,13 @@
         startDateCompareElt.val(new Date(endCompare).format(format));
       compareElt.prop('checked', compare);
       this.updateCalendarRange();
-      this.compareClick();
+      if (compare) {
+        this.compareActivate();
+        this.updateCalendarCompareRange();
+      }
+      else
+        this.compareDeactivate();
+      this.updateDateInfo();
     },
 
     updateCalendarRange: function () {
