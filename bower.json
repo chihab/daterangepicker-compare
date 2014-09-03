@@ -18,10 +18,8 @@
     "tests"
   ],
   "main": [
-    "css/daterangepicker.css",
-    "js/date.js",
-    "js/calendar.js",
-    "js/daterangepicker.js"
+    "dist/daterangepicker-compare.min.css",
+    "dist/daterangepicker-compare.min.js"
   ],
   "dependencies": {
     "bootstrap": "latest",
