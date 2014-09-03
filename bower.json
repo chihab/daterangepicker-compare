@@ -19,7 +19,7 @@
   ],
   "main": [
     "css/daterangepicker.css",
-    "js/utils.js",
+    "js/date.js",
     "js/calendar.js",
     "js/daterangepicker.js"
   ],

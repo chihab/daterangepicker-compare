@@ -7,7 +7,7 @@
     <link href="css/daterangepicker.css" rel="stylesheet" type="text/css"/>
 
     <script src="bower_components/moment/min/moment-with-locales.min.js"></script>
-    <script src="js/utils.js"></script>
+    <script src="js/date.js"></script>
     <script src="js/calendar.js"></script>
     <script src="js/daterangepicker.js"></script>
 
@@ -34,11 +34,19 @@
                                     end:  end,
                                     start: new Date(end).subDays(15)
                                 };
+                            },
+                            function (){
+                                var end = new Date().subDays(1);
+                                return {
+                                    name: "Last 21 days",
+                                    end:  end,
+                                    start: new Date(end).subDays(21)
+                                };
                             }
                         ],
-                        defaultPeriod: 'Last 15 days',
+                        defaultPeriod: 'Last 21 days',
 //                        activePeriods: ['month', 'custom'],
-                        compare: false,
+                        compare: true,
                         comparePeriod: 'previous',
                         opens: 'left'
 //                        compareStartDate: '14/08/2014',
@@ -52,8 +60,26 @@
     </script>
 </head>
 <body>
+<!-- Add your site or application content here -->
+<div class="container">
+    <div class="header">
+        <ul class="nav nav-pills pull-right">
+            <li class="active"><a ng-href="#">Home</a></li>
+            <li><a ng-href="#">About</a></li>
+            <li><a ng-href="#">Contact</a></li>
+        </ul>
+        <h3 class="text-muted">ngDaterangepickerCompare</h3>
+    </div>
+
+    <pre>
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam dignissimos exercitationem fugiat maxime pariatur qui sed sequi, voluptas! A cupiditate debitis esse exercitationem rem totam vel vitae? Expedita, magnam sit!    </pre>
     <div>
         <div id="daterangepicker" class="pull-right" style="cursor: pointer;"/>
     </div>
+
+    <div class="footer">
+        <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
+    </div>
+</div>
 </div>
 </body>
