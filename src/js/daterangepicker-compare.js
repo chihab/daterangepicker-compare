@@ -62,7 +62,7 @@
 
     var DRTInfo = '<div>'+
       '<button id="datepickerExpand" class="btn btn-default" type="button">' +
-      '<span class="hidden-xs"> ' +
+      '<span> ' +
       '<strong class="text-info" id="datepicker-from-info"></strong>' +
       ' - '+
       '<strong class="text-info" id="datepicker-to-info"></strong>' +
